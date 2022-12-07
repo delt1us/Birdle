@@ -6,15 +6,15 @@ namespace Birdle
 {
     internal class Tile
     {
-        private bool b_IsVisible;
+        public bool b_IsVisible;
         private Rectangle m_Rectangle;
         private Rectangle m_SourceRectangle;
 
-        public Tile(Rectangle rectangle, Rectangle sourceRectangle, bool isVisible)
+        public Tile(Rectangle rectangle, Rectangle sourceRectangle)
         {
             m_Rectangle = rectangle;
             m_SourceRectangle = sourceRectangle;
-            b_IsVisible = isVisible;
+            b_IsVisible = true;
         }
         
         // Used to change location gradually like an animation

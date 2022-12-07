@@ -29,6 +29,7 @@ namespace Birdle
             vec_GridBorderCoordinates = new Vector2((float)m_GridCoordinates.X - 10, (float)m_GridCoordinates.Y - 10);
 
             CreateTiles();
+            SetRandomTileInvisible();
         }
 
         public void Update()
@@ -60,10 +61,16 @@ namespace Birdle
                 {
                     Rectangle CurrentTileRectangle = new Rectangle(m_GridCoordinates.X + i_TileSize * column, m_GridCoordinates.Y + i_TileSize * row, i_TileSize, i_TileSize);
                     Rectangle CurrentTileRegionRectangle = new Rectangle(column * i_TileSize, row * i_TileSize, i_TileSize, i_TileSize);
-                    Tile tile = new Tile(CurrentTileRectangle, CurrentTileRegionRectangle, true);
+                    Tile tile = new Tile(CurrentTileRectangle, CurrentTileRegionRectangle);
                     l_Tiles.Add(tile);
                 }
             }
+        }
+
+        private void SetRandomTileInvisible()
+        {
+            Random m_Random = new Random();
+            l_Tiles[m_Random.Next(0, l_Tiles.Capacity - 1)].b_IsVisible = false;
         }
 
         private void ShuffleTiles()
