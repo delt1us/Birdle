@@ -45,6 +45,7 @@ namespace Birdle
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
+            m_Grid.Update();    
 
             base.Update(gameTime);
         }

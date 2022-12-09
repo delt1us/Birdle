@@ -1,20 +1,21 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Birdle
 {
     internal class Tile
     {
         public bool b_IsVisible;
-        private Rectangle m_Rectangle;
+        public Point m_GridCoordinates;
+        public Rectangle m_Rectangle;
         private Rectangle m_SourceRectangle;
 
-        public Tile(Rectangle rectangle, Rectangle sourceRectangle)
+        public Tile(Rectangle rectangle, Rectangle sourceRectangle, Point gridCoordinates)
         {
+            b_IsVisible = true;
+            m_GridCoordinates = gridCoordinates;
             m_Rectangle = rectangle;
             m_SourceRectangle = sourceRectangle;
-            b_IsVisible = true;
         }
         
         // Used to change location gradually like an animation
