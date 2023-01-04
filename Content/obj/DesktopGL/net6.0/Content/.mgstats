@@ -1,3 +1,4 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Fonts/Default.spritefont","C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/bin/DesktopGL/Content/Fonts/Default.xnb","FontDescriptionProcessor","SpriteFontContent",2068,70687,0.2675861
 "C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/grid-border.png","C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/bin/DesktopGL/Content/Graphics/grid-border.xnb","TextureProcessor","Texture2DContent",1082,3385685,0.2186234
 "C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/numbered-grid.png","C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/bin/DesktopGL/Content/Graphics/numbered-grid.xnb","TextureProcessor","Texture2DContent",38965,3240085,0.073778

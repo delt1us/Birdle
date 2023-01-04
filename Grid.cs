@@ -12,10 +12,10 @@ namespace Birdle
         private static int i_GridSideLength = 900;
 
         public Texture2D m_Image;
-        
+
         public Texture2D m_GridBorderTexture;
         private Vector2 vec_GridBorderCoordinates;
-        
+
         // Comma indicates a 2D array
         private Tile[,] a_Tiles;
         private Tile m_InvisibleTile;
@@ -49,8 +49,10 @@ namespace Birdle
 
             CreateTiles();
             SetRandomTileInvisible();
+            // TODO: ShuffleTiles();
         }
 
+        // Called every frame from Game1 Update()
         public void Update()
         {
             HandleInputs();
@@ -208,10 +210,10 @@ namespace Birdle
             Random m_Random = new Random();
             int row = m_Random.Next(0, i_Size);
             int column = m_Random.Next(0, i_Size);
- 
+
             // Makes tile be invisible
             a_Tiles[column, row].b_IsVisible = false;
- 
+
             // Used for moving tile around
             m_InvisibleTile = a_Tiles[column, row];
         }
