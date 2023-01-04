@@ -14,9 +14,12 @@ namespace Birdle
         private SpriteBatch m_SpriteBatch;
         private Grid m_Grid;
 
+        // Font for drawing info on screen
         private SpriteFont m_Font;
+        // Timer
         private float f_TimeElapsed;
         private Vector2 vec_TimerLocation;
+        private Vector2 vec_MoveLocation;
 
         public Game1()
         {
@@ -30,7 +33,6 @@ namespace Birdle
             m_Graphics.PreferredBackBufferHeight = t_SCREEN_DIMENSIONS.height;
 
             f_TimeElapsed = 0f;
-            vec_TimerLocation = new Vector2(60, 140);
         }
 
         protected override void Initialize()
@@ -46,6 +48,10 @@ namespace Birdle
             m_Grid.m_Image = Content.Load<Texture2D>("Graphics/numbered-grid");
 
             m_Font = Content.Load<SpriteFont>("Fonts/Default");
+
+            // These need to be here as they need font to be loaded
+            vec_TimerLocation = new Vector2(60, 140);
+            vec_MoveLocation = new Vector2(60, vec_TimerLocation.Y + m_Font.LineSpacing);
         }
 
         protected override void Update(GameTime gameTime)
@@ -64,7 +70,10 @@ namespace Birdle
             m_SpriteBatch.Begin();
             // Render things here
             m_Grid.Render(m_SpriteBatch);
+            // Draws timer
             m_SpriteBatch.DrawString(m_Font, $"Time: {(int)f_TimeElapsed}", vec_TimerLocation, Color.Black);
+            // Draws moves made
+            m_SpriteBatch.DrawString(m_Font, $"Moves: {m_Grid.i_MovesMade}", vec_MoveLocation, Color.Black);
 
             m_SpriteBatch.End();
 

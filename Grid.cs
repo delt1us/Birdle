@@ -11,9 +11,12 @@ namespace Birdle
     {
         private static int i_GridSideLength = 900;
 
-        public Texture2D m_Image;
+        // Number of moves made
+        public int i_MovesMade;
 
+        public Texture2D m_Image;
         public Texture2D m_GridBorderTexture;
+
         private Vector2 vec_GridBorderCoordinates;
 
         // Comma indicates a 2D array
@@ -27,6 +30,7 @@ namespace Birdle
 
         // Size in images (e.g. 3x3, 5x5 etc.) 
         private int i_Size;
+
 
         public Grid((int width, int height) t_ScreenDimensions, int size)
         {
@@ -46,6 +50,8 @@ namespace Birdle
                 {"S", false},
                 {"D", false}
             };
+
+            i_MovesMade = 0;
 
             CreateTiles();
             SetRandomTileInvisible();
@@ -168,6 +174,9 @@ namespace Birdle
             Tile tempTile = a_Tiles[tile1Location.X, tile1Location.Y];
             MoveTile(a_Tiles[tile2Location.X, tile2Location.Y], tile2Location, tile1Location);
             MoveTile(tempTile, tile1Location, tile2Location);
+
+            // Updates movecounter
+            i_MovesMade += 1;
         }
 
         // Moves tile to different position in the grid and updates its location
