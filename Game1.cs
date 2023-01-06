@@ -8,6 +8,10 @@ namespace Birdle
     {
         // This is a tuple
         private static (int width, int height) t_SCREEN_DIMENSIONS = (1920, 1080);
+        // Used for the solution preview
+        private static Rectangle rec_SOLUTIONRECTANGLE = new Rectangle(1450, 140, 400, 400);
+        private static Rectangle rec_SOLUTIONRECTANGLEBORDER = new Rectangle(rec_SOLUTIONRECTANGLE.X - 5, rec_SOLUTIONRECTANGLE.Y - 5, 410, 410);
+        // Determines the dimensions of the grid (not scale)
         private const int i_GRIDSIZE = 3;
 
         private GraphicsDeviceManager m_Graphics;
@@ -20,6 +24,7 @@ namespace Birdle
         private float f_TimeElapsed;
         private Vector2 vec_TimerLocation;
         private Vector2 vec_MoveLocation;
+
 
         public Game1()
         {
@@ -69,7 +74,11 @@ namespace Birdle
 
             m_SpriteBatch.Begin();
             // Render things here
+            // Draws grid
             m_Grid.Render(m_SpriteBatch);
+            // Draws solution
+            m_SpriteBatch.Draw(m_Grid.m_GridBorderTexture, rec_SOLUTIONRECTANGLEBORDER, null, Color.White);
+            m_SpriteBatch.Draw(m_Grid.m_Image, rec_SOLUTIONRECTANGLE, null, Color.White);
             // Draws timer
             m_SpriteBatch.DrawString(m_Font, $"Time: {(int)f_TimeElapsed}", vec_TimerLocation, Color.Black);
             // Draws moves made
