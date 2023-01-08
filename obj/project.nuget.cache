@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "TKjekP4T3JZ0Q7AUKO78K08snn4MRbA4IYdqxVKNFosa6nu15OvqWI5J5n6+QtktbcdEfnxj+9Vm7rMM1lN+1Q==",
+  "dgSpecHash": "VafsEaaOe91QkUBbkb/zhWJyoLlSz2jAJ0DRSlpnO6wQtwAouUfybHRoZYR9S6E25MLt7mxk0YbqeI7PhLRbxg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deltius\\Documents\\Projects\\Module 2\\Birdle\\Birdle.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Deltius\\.nuget\\packages\\monogame.content.builder.task\\3.8.1.303\\monogame.content.builder.task.3.8.1.303.nupkg.sha512",
-    "C:\\Users\\Deltius\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.303\\monogame.framework.desktopgl.3.8.1.303.nupkg.sha512"
+    "C:\\Users\\Deltius\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.303\\monogame.framework.desktopgl.3.8.1.303.nupkg.sha512",
+    "C:\\Users\\Deltius\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
   ],
   "logs": []
 }

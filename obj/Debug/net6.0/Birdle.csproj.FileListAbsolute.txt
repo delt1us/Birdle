@@ -28,3 +28,4 @@ C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Gra
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\grid-border.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\numbered-grid.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Fonts\Default.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Newtonsoft.Json.dll
