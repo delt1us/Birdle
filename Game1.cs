@@ -19,8 +19,6 @@ namespace Birdle
         private GraphicsDeviceManager m_Graphics;
         private SpriteBatch m_SpriteBatch;
 
-        private List<Button> l_Buttons;
-
         // Creates a Playerdata object which holds all the Level objects
         private PlayerData m_PlayerData;
 
