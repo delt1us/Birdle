@@ -34,9 +34,6 @@ namespace Birdle
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-
-            l_Buttons = new List<Button>();
-
             m_Graphics.PreferredBackBufferWidth = t_SCREEN_DIMENSIONS.width;
             m_Graphics.PreferredBackBufferHeight = t_SCREEN_DIMENSIONS.height;
 
