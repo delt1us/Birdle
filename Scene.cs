@@ -93,4 +93,34 @@ namespace Birdle
             }
         }
     }
+
+    internal class SceneMainMenu
+    {
+        // Stores buttons
+        List<Button> l_Buttons;
+
+        public SceneMainMenu()
+        {
+            l_Buttons = new List<Button>();
+
+            CreateButtons();
+        }
+
+        private void CreateButtons()
+        {
+            
+        }
+
+        // Called every frame from Update in Game1
+        public void Update(float f_TimeSinceLastFrame)
+        {
+
+        }
+
+        // Called every frame from Draw in Game1
+        public void Render(SpriteBatch m_SpriteBatch)
+        {
+
+        }
+    }
 }

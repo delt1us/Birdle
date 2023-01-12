@@ -13,6 +13,8 @@ namespace Birdle
     {
         // This is a tuple
         private static (int width, int height) t_SCREEN_DIMENSIONS = (1920, 1080);
+        // Used for scaling everything down or up to screensize, doesn't do anything until I implement automatic fullscreening
+        private static Vector2 vec_RenderScale = new Vector2(t_SCREEN_DIMENSIONS.width / 1920f, t_SCREEN_DIMENSIONS.height / 1080f);
         // Path to playerdata file
         private static string str_PATH = "playerdata.json";
 
@@ -25,8 +27,9 @@ namespace Birdle
         // String determining what gets rendered and updated
         private string str_GameState;
 
-        // Scene object that determines what happens during what gamestate
+        // Scene objects that determines what happens during what gamestate
         private SceneGame m_SceneGame;
+        private SceneMainMenu m_SceneMainMenu;
 
         public Game1()
         {
@@ -39,6 +42,7 @@ namespace Birdle
 
             str_GameState = "game";
             m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS);
+            m_SceneMainMenu = new SceneMainMenu();
         }
 
         protected override void Initialize()
@@ -81,12 +85,20 @@ namespace Birdle
             {
                 m_SceneGame.Update(f_TimeElapsed);
             }
+            else if (str_GameState == "main menu")
+            {
+                m_SceneMainMenu.Update(f_TimeElapsed);
+            }
 
             base.Update(gameTime);
         }
         // Also runs every frame
         protected override void Draw(GameTime gameTime)
         {
+            // Everything is drawn to the render m_RenderTarget "m_RenderTarget"
+            RenderTarget2D m_RenderTarget = new RenderTarget2D(GraphicsDevice, 1920, 1080);
+            GraphicsDevice.SetRenderTarget(m_RenderTarget);
+
             GraphicsDevice.Clear(Color.White);
 
             m_SpriteBatch.Begin();
@@ -97,9 +109,23 @@ namespace Birdle
             {
                 m_SceneGame.Render(m_SpriteBatch, m_PlayerData);
             }
+            else if (str_GameState == "main menu")
+            {
+                m_SceneMainMenu.Render(m_SpriteBatch);
+            }
 
             m_SpriteBatch.End();
 
+            // Reset Render target 
+            GraphicsDevice.SetRenderTarget(null);
+            
+            m_SpriteBatch.Begin();
+
+            // Draws render target so that everything scales properly
+            m_SpriteBatch.Draw(m_RenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
+            // m_SpriteBatch.Draw(m_RenderTarget, new Vector2(0, 0), null, Color.White, 0f, new Vector2(0, 0), vec_RenderScale, SpriteEffects.None, 0f);
+
+            m_SpriteBatch.End();
             base.Draw(gameTime);
         }
 
