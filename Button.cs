@@ -49,7 +49,7 @@ namespace Birdle
         public void Render(SpriteBatch m_SpriteBatch)
         {
             m_SpriteBatch.Draw(m_Texture, rec_ButtonHitbox, null, Color.White);
-            m_SpriteBatch.DrawString(m_Font, str_Text, vec_TextLocation, Color.Blacka);
+            m_SpriteBatch.DrawString(m_Font, str_Text, vec_TextLocation, Color.Black);
         }
 
         // Checks if given Point is in the button
