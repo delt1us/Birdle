@@ -94,10 +94,10 @@ namespace Birdle
     {
         // Stores buttons
         private List<Button> l_Buttons;
-        private Button m_PlayButton;
-        private Button m_EndlessButton;
-        private Button m_SettingsButton;
-        private Button m_QuitButton;
+        public Button m_PlayButton;
+        public Button m_EndlessButton;
+        public Button m_SettingsButton;
+        public Button m_QuitButton;
         private Texture2D m_ButtonTexture;
         private Texture2D m_TitleTexture;
         private Vector2 m_TitleLocation;
@@ -125,10 +125,19 @@ namespace Birdle
             l_Buttons.Add(m_QuitButton);
         }
 
+        // Resets pressed value of all buttons to false
+        public void ResetButtons()
+        {
+            foreach (Button button in l_Buttons)
+            {
+                button.b_Pressed = false;
+            }
+        }
+
         // Called every frame from Update in Game1
         public void Update(float f_TimeSinceLastFrame)
         {
-            foreach(Button button in l_Buttons)
+            foreach (Button button in l_Buttons)
             {
                 button.Update();
             }
@@ -137,7 +146,7 @@ namespace Birdle
         // Called every frame from Draw in Game1
         public void Render(SpriteBatch m_SpriteBatch)
         {
-            foreach(Button button in l_Buttons)
+            foreach (Button button in l_Buttons)
             {
                 button.Render(m_SpriteBatch);
             }

@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+using System.Diagnostics;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Birdle
 {
@@ -88,9 +88,11 @@ namespace Birdle
             {
                 m_SceneGame.Update(f_TimeElapsed);
             }
+
             else if (str_GameState == "main menu")
             {
                 m_SceneMainMenu.Update(f_TimeElapsed);
+                CheckButtonsInMainMenu();
             }
 
             base.Update(gameTime);
@@ -122,7 +124,7 @@ namespace Birdle
 
             // Reset Render target 
             GraphicsDevice.SetRenderTarget(null);
-            
+
             m_SpriteBatch.Begin();
 
             // Draws render target so that everything scales properly
@@ -131,6 +133,30 @@ namespace Birdle
 
             m_SpriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        // Checks buttons in main menu and changes gamestate accordingly
+        private void CheckButtonsInMainMenu()
+        {
+            // Checks buttons being pressed
+            if (m_SceneMainMenu.m_PlayButton.b_Pressed)
+            {
+                str_GameState = "level select";
+            }
+            else if (m_SceneMainMenu.m_EndlessButton.b_Pressed)
+            {
+                str_GameState = "endless";
+            }
+            else if (m_SceneMainMenu.m_SettingsButton.b_Pressed)
+            {
+                str_GameState = "settings";
+            }
+            // Exits the game
+            else if (m_SceneMainMenu.m_QuitButton.b_Pressed)
+            {
+                Exit();
+            }
+            m_SceneMainMenu.ResetButtons();
         }
 
         // Loads user data
