@@ -17,7 +17,7 @@ namespace Birdle
             m_Rectangle = rectangle;
             m_SourceRectangle = sourceRectangle;
         }
-        
+
         // Used to change location gradually like an animation
         public void Update()
         {
