@@ -40,9 +40,7 @@ namespace Birdle
             m_Graphics.PreferredBackBufferWidth = t_SCREEN_DIMENSIONS.width;
             m_Graphics.PreferredBackBufferHeight = t_SCREEN_DIMENSIONS.height;
 
-            str_GameState = "game";
-            m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS);
-            m_SceneMainMenu = new SceneMainMenu();
+            str_GameState = "main menu";
         }
 
         protected override void Initialize()
@@ -54,14 +52,19 @@ namespace Birdle
         {
             m_SpriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // Loads game font
+            SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");
+            m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font);
+
+            SpriteFont m_ButtonFont = Content.Load<SpriteFont>("Fonts/Button");
+            Texture2D m_ButtonTexture = Content.Load<Texture2D>("Graphics/button");
+            Texture2D m_TitleTextTexture = Content.Load<Texture2D>("Graphics/TitleText");
+            m_SceneMainMenu = new SceneMainMenu(t_SCREEN_DIMENSIONS, m_ButtonTexture, m_ButtonFont, m_TitleTextTexture);
+
             // Loads grid
             Texture2D m_GridBorder = Content.Load<Texture2D>("Graphics/grid-border");
             Texture2D m_GridTexture = Content.Load<Texture2D>("Graphics/numbered-grid");
             m_SceneGame.LoadGrid(m_GridBorder, m_GridTexture);
-
-            // Loads game font
-            SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");
-            m_SceneGame.LoadFont(m_Font);
 
             // Game data (information like high score, best time etc)
             // Check if file exists already
@@ -112,6 +115,7 @@ namespace Birdle
             else if (str_GameState == "main menu")
             {
                 m_SceneMainMenu.Render(m_SpriteBatch);
+                // TODO check each button for what gamestate to switch to
             }
 
             m_SpriteBatch.End();

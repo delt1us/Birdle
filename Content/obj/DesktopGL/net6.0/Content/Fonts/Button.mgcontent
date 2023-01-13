@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Fonts/Button.spritefont</SourceFile>
+  <SourceTime>2023-01-13T10:10:03.5295603+00:00</SourceTime>
+  <DestFile>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/bin/DesktopGL/Content/Fonts/Button.xnb</DestFile>
+  <DestTime>2023-01-13T10:10:08.0374803+00:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2022-07-26T12:44:56+01:00</ImporterTime>
+  <Processor>LocalizedFontProcessor</Processor>
+  <ProcessorTime>2022-07-26T12:44:56+01:00</ProcessorTime>
+  <Parameters>
+    <Key>PremultiplyAlpha</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

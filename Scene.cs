@@ -29,11 +29,12 @@ namespace Birdle
         // Determines the dimensions of the grid (not scale)
         private const int i_GRIDSIZE = 3;
 
-        public SceneGame((int width, int height) t_SCREEN_DIMENSIONS)
+        public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font)
         {
             m_Grid = new Grid(t_SCREEN_DIMENSIONS, i_GRIDSIZE);
             f_TimeSpentOnPuzzle = 0f;
 
+            m_Font = font;
         }
 
         // Loads Grid object
@@ -41,12 +42,6 @@ namespace Birdle
         {
             m_Grid.m_GridBorderTexture = GridBorder;
             m_Grid.m_Image = GridTexture;
-        }
-
-        // Loads  font 
-        public void LoadFont(SpriteFont font)
-        {
-            m_Font = font;
         }
 
         // Called every frame from Update in Game1
@@ -94,33 +89,61 @@ namespace Birdle
         }
     }
 
+    // The main menu
     internal class SceneMainMenu
     {
         // Stores buttons
-        List<Button> l_Buttons;
+        private List<Button> l_Buttons;
+        private Button m_PlayButton;
+        private Button m_EndlessButton;
+        private Button m_SettingsButton;
+        private Button m_QuitButton;
+        private Texture2D m_ButtonTexture;
+        private Texture2D m_TitleTexture;
+        private Vector2 m_TitleLocation;
 
-        public SceneMainMenu()
+        public SceneMainMenu((int width, int height) t_SCREEN_DIMENSIONS, Texture2D buttton_texture, SpriteFont m_ButtonFont, Texture2D title_text_texture)
         {
             l_Buttons = new List<Button>();
+            m_ButtonTexture = buttton_texture;
+            m_TitleTexture = title_text_texture;
+            m_TitleLocation = new Vector2(((float)t_SCREEN_DIMENSIONS.width - m_TitleTexture.Width) / 2f, 150);
 
-            CreateButtons();
+            CreateButtons(m_ButtonFont);
         }
 
-        private void CreateButtons()
+        // Creates and adds buttons to list 
+        public void CreateButtons(SpriteFont m_ButtonFont)
         {
-            
+            m_PlayButton = new Button(new Vector2(510, 400), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Play", m_ButtonFont);
+            l_Buttons.Add(m_PlayButton);
+            m_EndlessButton = new Button(new Vector2(1000, 400), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Endless", m_ButtonFont);
+            l_Buttons.Add(m_EndlessButton);
+            m_SettingsButton = new Button(new Vector2(750, 600), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Settings", m_ButtonFont);
+            l_Buttons.Add(m_SettingsButton);
+            m_QuitButton = new Button(new Vector2(750, 800), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Quit", m_ButtonFont);
+            l_Buttons.Add(m_QuitButton);
         }
 
         // Called every frame from Update in Game1
         public void Update(float f_TimeSinceLastFrame)
         {
-
+            foreach(Button button in l_Buttons)
+            {
+                button.Update();
+            }
         }
 
         // Called every frame from Draw in Game1
         public void Render(SpriteBatch m_SpriteBatch)
         {
+            foreach(Button button in l_Buttons)
+            {
+                button.Render(m_SpriteBatch);
+            }
 
+            // Title text
+            m_SpriteBatch.Draw(m_TitleTexture, m_TitleLocation, Color.White);
         }
     }
 }
