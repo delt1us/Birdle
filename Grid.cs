@@ -54,8 +54,8 @@ namespace Birdle
             i_MovesMade = 0;
 
             CreateTiles();
+            ShuffleTiles();
             SetRandomTileInvisible();
-            // TODO: ShuffleTiles();
         }
 
         // Called every frame from Game1 Update()
@@ -81,9 +81,53 @@ namespace Birdle
             }
         }
 
+        // Shuffles tiles
         private void ShuffleTiles()
         {
-            // TODO
+            Random m_Random = new Random();
+            Tile[,] a_NewTiles = new Tile[i_Size, i_Size];
+            List<(int x, int y)> l_NumList = new List<(int x, int y)>();
+
+            // Creates a list with coordinates in 
+            // This is used to make sure a tile is moved into every location and not moved into the same location twice
+            // Creates rows
+            for (int x = 0; x < i_Size; x++)
+            {
+                // Creates columns
+                for (int y = 0; y < i_Size; y++)
+                {
+                    l_NumList.Add((x, y));
+                }
+            }
+
+            // Moves tiles into randomly chosen location
+            // Row
+            for (int x = 0; x < i_Size; x++)
+            {
+                // Column
+                for (int y = 0; y < i_Size; y++)
+                {
+                    // Gets an index and removes it from possible options
+                    int chosenIndex = m_Random.Next(0, l_NumList.Count);
+                    (int x, int y) locationOfTileToPutHere = l_NumList[chosenIndex];
+                    l_NumList.RemoveAt(chosenIndex);
+
+                    // Copies item at index of original list to start of new list
+                    a_NewTiles[x, y] = a_Tiles[locationOfTileToPutHere.x, locationOfTileToPutHere.y];
+                }
+            }
+
+            // Moves the tiles locations to newly updated location
+            // Could not do this earlier because MoveTiles moves the tiles in a_Tiles
+            a_Tiles = a_NewTiles;
+            for (int x = 0; x < i_Size; x++)
+            {
+                // Column
+                for (int y = 0; y < i_Size; y++)
+                {
+                    MoveTile(a_Tiles[x, y], new Point(x, y));
+                }
+            }
         }
 
         // Handles all player inputs
@@ -172,15 +216,15 @@ namespace Birdle
         {
             // Simple swap with temp variable 
             Tile tempTile = a_Tiles[tile1Location.X, tile1Location.Y];
-            MoveTile(a_Tiles[tile2Location.X, tile2Location.Y], tile2Location, tile1Location);
-            MoveTile(tempTile, tile1Location, tile2Location);
+            MoveTile(a_Tiles[tile2Location.X, tile2Location.Y], tile1Location);
+            MoveTile(tempTile, tile2Location);
 
             // Updates movecounter
             i_MovesMade += 1;
         }
 
         // Moves tile to different position in the grid and updates its location
-        private void MoveTile(Tile tile, Point location, Point destination)
+        private void MoveTile(Tile tile, Point destination)
         {
             // Moves location on coordinate grid
             tile.m_GridCoordinates = destination;
