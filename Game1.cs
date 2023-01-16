@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +18,8 @@ namespace Birdle
         // Path to playerdata file
         private static string str_PATH = "playerdata.json";
 
+        private static float f_SECONDS_FOR_LAST_TILE_TO_APPEAR = 3;
+
         private GraphicsDeviceManager m_Graphics;
         private SpriteBatch m_SpriteBatch;
 
@@ -35,6 +36,9 @@ namespace Birdle
 
         private int i_ClickState;
         private bool b_GridSolved;
+
+        // Everything is drawn to the render m_RenderTarget "m_RenderTarget"
+        private RenderTarget2D m_RenderTarget;
 
         public Game1()
         {
@@ -87,6 +91,7 @@ namespace Birdle
             {
                 CreateGameData();
             }
+            m_RenderTarget = new RenderTarget2D(GraphicsDevice, 1920, 1080);
         }
         // Runs every frame
         protected override void Update(GameTime gameTime)
@@ -130,11 +135,18 @@ namespace Birdle
             {
                 m_SceneGame.Update(f_TimeElapsed);
                 CheckButtonsInGame();
-                CheckSolved();
-
-                if (b_GridSolved)
+                if (!b_GridSolved)
                 {
-                    // TODO 
+                    CheckSolved();
+                }
+
+                if (b_GridSolved && m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity < 1f)
+                {
+                    m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity += f_TimeElapsed * (1f / f_SECONDS_FOR_LAST_TILE_TO_APPEAR);
+                    if (m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity > 1f)
+                    {
+                        m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity = 1f;
+                    }
                 }
             }
 
@@ -167,8 +179,6 @@ namespace Birdle
         // Also runs every frame
         protected override void Draw(GameTime gameTime)
         {
-            // Everything is drawn to the render m_RenderTarget "m_RenderTarget"
-            RenderTarget2D m_RenderTarget = new RenderTarget2D(GraphicsDevice, 1920, 1080);
             GraphicsDevice.SetRenderTarget(m_RenderTarget);
 
             GraphicsDevice.Clear(Color.White);

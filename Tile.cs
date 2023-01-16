@@ -11,6 +11,7 @@ namespace Birdle
         private Rectangle m_SourceRectangle;
 
         public Point m_OriginalLocation;
+        public float f_Opacity;
 
         public Tile(Rectangle rectangle, Rectangle sourceRectangle, Point gridCoordinates, Point originalLocation)
         {
@@ -19,6 +20,7 @@ namespace Birdle
             m_Rectangle = rectangle;
             m_SourceRectangle = sourceRectangle;
             m_OriginalLocation = originalLocation;
+            f_Opacity = 1f;
         }
 
         // Used to change location gradually like an animation
@@ -29,10 +31,7 @@ namespace Birdle
 
         public void Render(SpriteBatch m_SpriteBatch, Texture2D texture)
         {
-            if (b_IsVisible)
-            {
-                m_SpriteBatch.Draw(texture, m_Rectangle, m_SourceRectangle, Color.White);
-            }
+            m_SpriteBatch.Draw(texture, m_Rectangle, m_SourceRectangle, Color.White * f_Opacity);
         }
     }
 }

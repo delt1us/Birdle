@@ -58,8 +58,12 @@ namespace Birdle
         // Called every frame from Update in Game1
         public void Update(float f_TimeElapsed)
         {
-            // Updates timer
-            f_TimeSpentOnPuzzle += f_TimeElapsed;
+            if (!m_Grid.b_Solved)
+            {
+                // Updates timer
+                f_TimeSpentOnPuzzle += f_TimeElapsed;
+            }
+
             // Updates grid
             m_Grid.Update();
 

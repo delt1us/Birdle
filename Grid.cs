@@ -21,7 +21,7 @@ namespace Birdle
 
         // Comma indicates a 2D array
         private Tile[,] a_Tiles;
-        private Tile m_InvisibleTile;
+        public Tile m_InvisibleTile;
         // Coordinates for where to draw the grid
         private Point m_GridCoordinates;
 
@@ -165,6 +165,12 @@ namespace Birdle
             // Checks if keys are depressed
             CheckForKeysDepressed(kstate);
 
+            // !Debug tool
+            if (kstate.IsKeyDown(Keys.I))
+            {
+                b_Solved = true;
+            }
+
             // Move tile up
             if (kstate.IsKeyDown(Keys.W) && m_MovementKeyStates["W"] == false)
             {
@@ -292,7 +298,7 @@ namespace Birdle
             int column = m_Random.Next(0, i_Size);
 
             // Makes tile be invisible
-            a_Tiles[column, row].b_IsVisible = false;
+            a_Tiles[column, row].f_Opacity = 0f;
 
             // Used for moving tile around
             m_InvisibleTile = a_Tiles[column, row];
