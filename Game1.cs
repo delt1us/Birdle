@@ -68,7 +68,7 @@ namespace Birdle
             Texture2D m_Level2ButtonTexture = Content.Load<Texture2D>("Graphics/level2icon");
             Texture2D m_Level3ButtonTexture = Content.Load<Texture2D>("Graphics/level3icon");
             Texture2D m_Level4ButtonTexture = Content.Load<Texture2D>("Graphics/level4icon");
-            m_SceneLevelSelect = new SceneLevelSelect(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonFont);
+            m_SceneLevelSelect = new SceneLevelSelect(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonTexture, m_ButtonFont);
 
             // Game data (information like high score, best time etc)
             // Check if file exists already
@@ -178,6 +178,17 @@ namespace Birdle
             {
                 // Load level 4
                 m_GridTexture = Content.Load<Texture2D>("Graphics/level4");
+            }
+
+            // Checks for back button being pressed
+            else if (m_SceneLevelSelect.m_BackButton.b_Pressed)
+            {
+                // Sets game to main menu
+                str_GameState = "main menu";
+                // To prevent level being started without texture                
+                b_ButtonPressed = false;
+                // Resets back button for future use
+                m_SceneLevelSelect.m_BackButton.b_Pressed = false;
             }
 
             else
