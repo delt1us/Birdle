@@ -29,12 +29,22 @@ namespace Birdle
         // Determines the dimensions of the grid (not scale)
         private const int i_GRIDSIZE = 3;
 
-        public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font)
+        public Button m_BackButton;
+
+        public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont)
         {
             m_Grid = new Grid(t_SCREEN_DIMENSIONS, i_GRIDSIZE);
             f_TimeSpentOnPuzzle = 0f;
 
             m_Font = font;
+
+            m_BackButton = new Button(new Vector2(50, 850), backButtonTexture, backButtonTexture.Width, backButtonTexture.Height, "Back", backButtonFont);
+        }
+
+        public void Reset()
+        {
+            f_TimeSpentOnPuzzle = 0f;
+            m_Grid.ShuffleTiles();
         }
 
         // Loads Grid object
@@ -51,6 +61,9 @@ namespace Birdle
             f_TimeSpentOnPuzzle += f_TimeElapsed;
             // Updates grid
             m_Grid.Update();
+
+            // Update back button
+            m_BackButton.Update();
         }
 
         // Called every frame from Draw in Game1
@@ -63,6 +76,8 @@ namespace Birdle
             m_SpriteBatch.Draw(m_Grid.m_Image, rec_SOLUTION_RECTANGLE, null, Color.White);
 
             DrawText(m_SpriteBatch, m_PlayerData);
+
+            m_BackButton.Render(m_SpriteBatch);
         }
 
         // Draws Text

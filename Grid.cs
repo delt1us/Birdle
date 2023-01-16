@@ -82,7 +82,7 @@ namespace Birdle
         }
 
         // Shuffles tiles
-        private void ShuffleTiles()
+        public void ShuffleTiles()
         {
             Random m_Random = new Random();
             Tile[,] a_NewTiles = new Tile[i_Size, i_Size];

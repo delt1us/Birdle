@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Newtonsoft.Json;
 
@@ -32,6 +33,8 @@ namespace Birdle
         private SceneMainMenu m_SceneMainMenu;
         private SceneLevelSelect m_SceneLevelSelect;
 
+        private int i_ClickState;
+
         public Game1()
         {
             m_Graphics = new GraphicsDeviceManager(this);
@@ -42,6 +45,8 @@ namespace Birdle
             m_Graphics.PreferredBackBufferHeight = t_SCREEN_DIMENSIONS.height;
 
             str_GameState = "main menu";
+
+            i_ClickState = 0;
         }
 
         protected override void Initialize()
@@ -53,15 +58,15 @@ namespace Birdle
         {
             m_SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Actual game scene
-            SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");
-            m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font);
-
             // Main menu screen
             SpriteFont m_ButtonFont = Content.Load<SpriteFont>("Fonts/Button");
             Texture2D m_ButtonTexture = Content.Load<Texture2D>("Graphics/button");
             Texture2D m_TitleTextTexture = Content.Load<Texture2D>("Graphics/TitleText");
             m_SceneMainMenu = new SceneMainMenu(t_SCREEN_DIMENSIONS, m_ButtonTexture, m_ButtonFont, m_TitleTextTexture);
+
+            // Actual game scene
+            SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");
+            m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font, m_ButtonTexture, m_ButtonFont);
 
             // Level select screen
             Texture2D m_Level1ButtonTexture = Content.Load<Texture2D>("Graphics/level1icon");
@@ -87,10 +92,42 @@ namespace Birdle
             // Add time since last frame to the timer
             float f_TimeElapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            MouseState m_MouseState = Mouse.GetState();
+
+            // The following is to prevent multiple things happening for a single click
+            // ClickState = 0 means no click
+            // ClickState = 1 means click started being held down this frame
+            // ClickState = 2 means click started being held last frame
+            // When ClickState = 2 buttons stop being checked
+
+            // Resets click state when button is released
+            if (m_MouseState.LeftButton == ButtonState.Released)
+            {
+                i_ClickState = 0;
+            }
+
+            // If mouse button is down
+            else if (m_MouseState.LeftButton == ButtonState.Pressed)
+            {
+                // If no click last frame
+                if (i_ClickState == 0)
+                {
+                    // Increases clickstate 
+                    i_ClickState = 1;
+                }
+                // If click last frame
+                if (i_ClickState == 1)
+                {
+                    // Increases clickstate
+                    i_ClickState = 2;
+                }
+            }
+
             // Determines what to update
             if (str_GameState == "game")
             {
                 m_SceneGame.Update(f_TimeElapsed);
+                CheckButtonsInGame();
             }
 
             else if (str_GameState == "main menu")
@@ -150,9 +187,31 @@ namespace Birdle
             base.Draw(gameTime);
         }
 
+        // Checks buttons in game
+        private void CheckButtonsInGame()
+        {
+            // Prevent duplicate clicks from one input
+            if (i_ClickState == 2)
+            {
+                return;
+            }
+
+            if (m_SceneGame.m_BackButton.b_Pressed)
+            {
+                str_GameState = "level select";
+                m_SceneGame.m_BackButton.b_Pressed = false;
+            }
+        }
+
         // Checks buttons in level select and loads gamescene
         private void CheckButtonsInLevelSelect()
         {
+            // Prevent duplicate clicks from one input
+            if (i_ClickState == 2)
+            {
+                return;
+            }
+
             bool b_ButtonPressed = true;
             Texture2D m_GridTexture = null;
 
@@ -201,6 +260,9 @@ namespace Birdle
                 str_GameState = "game";
                 LoadGrid(m_GridTexture);
 
+                // Resets game (sets timer to 0 and shuffles tiles)
+                m_SceneGame.Reset();
+
                 // Resets level select
                 foreach (Button button in m_SceneLevelSelect.l_Buttons)
                 {
@@ -219,6 +281,12 @@ namespace Birdle
         // Checks buttons in main menu and changes gamestate accordingly
         private void CheckButtonsInMainMenu()
         {
+            // Prevent duplicate clicks from one input
+            if (i_ClickState == 2)
+            {
+                return;
+            }
+
             // Checks buttons being pressed
             if (m_SceneMainMenu.m_PlayButton.b_Pressed)
             {
