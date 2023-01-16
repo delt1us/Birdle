@@ -45,6 +45,7 @@ namespace Birdle
         {
             f_TimeSpentOnPuzzle = 0f;
             m_Grid.ShuffleTiles();
+            m_Grid.b_Solved = false;
         }
 
         // Loads Grid object

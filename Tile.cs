@@ -10,12 +10,15 @@ namespace Birdle
         public Rectangle m_Rectangle;
         private Rectangle m_SourceRectangle;
 
-        public Tile(Rectangle rectangle, Rectangle sourceRectangle, Point gridCoordinates)
+        public Point m_OriginalLocation;
+
+        public Tile(Rectangle rectangle, Rectangle sourceRectangle, Point gridCoordinates, Point originalLocation)
         {
             b_IsVisible = true;
             m_GridCoordinates = gridCoordinates;
             m_Rectangle = rectangle;
             m_SourceRectangle = sourceRectangle;
+            m_OriginalLocation = originalLocation;
         }
 
         // Used to change location gradually like an animation

@@ -31,12 +31,15 @@ namespace Birdle
         // Size in images (e.g. 3x3, 5x5 etc.) 
         private int i_Size;
 
+        public bool b_Solved;
 
         public Grid((int width, int height) t_ScreenDimensions, int size)
         {
             i_Size = size;
             // Creates 2D array 
             a_Tiles = new Tile[i_Size, i_Size];
+
+            b_Solved = false;   
 
             // Centers the grid
             m_GridCoordinates = new Point((int)((t_ScreenDimensions.width - i_GridSideLength) / 2f), (int)((t_ScreenDimensions.height - i_GridSideLength) / 2f));
@@ -67,6 +70,12 @@ namespace Birdle
             {
                 tile.Update();
             }
+
+            // If solved
+            if (CheckIfSolved())
+            {
+                b_Solved = true;
+            }
         }
 
         // This method 
@@ -79,6 +88,24 @@ namespace Birdle
             {
                 tile.Render(m_SpriteBatch, m_Image);
             }
+        }
+
+        // Checks if everything is in the right place, called every frame from Grid.Update()
+        private bool CheckIfSolved()
+        {
+            bool solved = true;
+            for (int row = 0; row < i_Size; row++)
+            {
+                for (int column = 0; column < i_Size; column++)
+                {
+                    Tile thisTile = a_Tiles[row, column];
+                    if (thisTile.m_OriginalLocation != new Point(row, column))
+                    {
+                        solved = false;
+                    }
+                }
+            }
+            return solved;
         }
 
         // Shuffles tiles
@@ -250,7 +277,7 @@ namespace Birdle
                     Rectangle CurrentTileRectangle = new Rectangle(m_GridCoordinates.X + i_TileSize * column, m_GridCoordinates.Y + i_TileSize * row, i_TileSize, i_TileSize);
                     Rectangle CurrentTileRegionRectangle = new Rectangle(column * i_TileSize, row * i_TileSize, i_TileSize, i_TileSize);
                     Point TileGridCoordinates = new Point(column, row);
-                    Tile tile = new Tile(CurrentTileRectangle, CurrentTileRegionRectangle, TileGridCoordinates);
+                    Tile tile = new Tile(CurrentTileRectangle, CurrentTileRegionRectangle, TileGridCoordinates, new Point(row, column));
                     a_Tiles[column, row] = tile;
                 }
             }

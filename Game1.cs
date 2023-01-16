@@ -34,6 +34,7 @@ namespace Birdle
         private SceneLevelSelect m_SceneLevelSelect;
 
         private int i_ClickState;
+        private bool b_GridSolved;
 
         public Game1()
         {
@@ -47,6 +48,7 @@ namespace Birdle
             str_GameState = "main menu";
 
             i_ClickState = 0;
+            b_GridSolved = false;   
         }
 
         protected override void Initialize()
@@ -128,6 +130,12 @@ namespace Birdle
             {
                 m_SceneGame.Update(f_TimeElapsed);
                 CheckButtonsInGame();
+                CheckSolved();
+
+                if (b_GridSolved)
+                {
+                    // TODO 
+                }
             }
 
             else if (str_GameState == "main menu")
@@ -144,6 +152,18 @@ namespace Birdle
 
             base.Update(gameTime);
         }
+
+        // Checks if grid is solved
+        // If so then saves data
+        private void CheckSolved()
+        {
+            if (m_SceneGame.m_Grid.b_Solved)
+            {
+                SaveGameData();
+                b_GridSolved = true;
+            }
+        }
+
         // Also runs every frame
         protected override void Draw(GameTime gameTime)
         {
