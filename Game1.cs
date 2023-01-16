@@ -244,29 +244,34 @@ namespace Birdle
 
             bool b_ButtonPressed = true;
             Texture2D m_GridTexture = null;
+            int i_GridSquareSize = 0;
 
             if (m_SceneLevelSelect.m_Level1Button.b_Pressed)
             {
                 // Load level 1
                 m_GridTexture = Content.Load<Texture2D>("Graphics/level1");
+                i_GridSquareSize = 3;
             }
 
             else if (m_SceneLevelSelect.m_Level2Button.b_Pressed)
             {
                 // Load level 2
                 m_GridTexture = Content.Load<Texture2D>("Graphics/level2");
+                i_GridSquareSize = 3;
             }
 
             else if (m_SceneLevelSelect.m_Level3Button.b_Pressed)
             {
                 // Load level 3
                 m_GridTexture = Content.Load<Texture2D>("Graphics/level3");
+                i_GridSquareSize = 5;
             }
 
             else if (m_SceneLevelSelect.m_Level4Button.b_Pressed)
             {
                 // Load level 4
                 m_GridTexture = Content.Load<Texture2D>("Graphics/level4");
+                i_GridSquareSize = 5;
             }
 
             // Checks for back button being pressed
@@ -287,11 +292,12 @@ namespace Birdle
 
             if (b_ButtonPressed)
             {
-                str_GameState = "game";
-                LoadGrid(m_GridTexture);
+                Texture2D borderTexture = Content.Load<Texture2D>("Graphics/grid-border");
+                m_SceneGame.MakeNewGrid(m_GridTexture, borderTexture, i_GridSquareSize, t_SCREEN_DIMENSIONS);
 
                 // Resets game (sets timer to 0 and shuffles tiles)
                 m_SceneGame.Reset();
+                str_GameState = "game";
 
                 // Resets level select
                 foreach (Button button in m_SceneLevelSelect.l_Buttons)

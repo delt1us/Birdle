@@ -33,7 +33,6 @@ namespace Birdle
 
         public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont)
         {
-            m_Grid = new Grid(t_SCREEN_DIMENSIONS, i_GRIDSIZE);
             f_TimeSpentOnPuzzle = 0f;
 
             m_Font = font;
@@ -106,6 +105,13 @@ namespace Birdle
                 m_SpriteBatch.DrawString(m_Font, text, vec_TextLocation, Color.Black);
                 vec_TextLocation.Y += i_LineSpacing;
             }
+        }
+
+        // Generates a new grid
+        public void MakeNewGrid(Texture2D texture, Texture2D borderTexture, int size, (int width, int height) screenDimensions)
+        {
+            m_Grid = new Grid(screenDimensions, size);
+            LoadGrid(borderTexture, texture);
         }
     }
 
