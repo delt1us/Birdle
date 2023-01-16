@@ -155,4 +155,51 @@ namespace Birdle
             m_SpriteBatch.Draw(m_TitleTexture, m_TitleLocation, Color.White);
         }
     }
+
+    // Scene for the level select
+    internal class SceneLevelSelect
+    {
+        public List<Button> l_Buttons;
+        public Button m_Level1Button;
+        public Button m_Level2Button;
+        public Button m_Level3Button;
+        public Button m_Level4Button;
+
+        public SceneLevelSelect(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, SpriteFont m_ButtonFont)
+        {
+            l_Buttons = new List<Button>();
+            CreateButtons(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonFont);
+        }
+
+        // Creates all the button objects for this scene
+        private void CreateButtons(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, SpriteFont m_ButtonFont)
+        {
+            m_Level1Button = new Button(new Vector2(100, 650), m_Level1ButtonTexture, m_Level1ButtonTexture.Width, m_Level1ButtonTexture.Height, "", m_ButtonFont);
+            l_Buttons.Add(m_Level1Button);
+            m_Level2Button = new Button(new Vector2(500, 500), m_Level2ButtonTexture, m_Level2ButtonTexture.Width, m_Level2ButtonTexture.Height, "", m_ButtonFont);    
+            l_Buttons.Add(m_Level2Button);
+            m_Level3Button = new Button(new Vector2(1200, 900), m_Level3ButtonTexture, m_Level3ButtonTexture.Width, m_Level3ButtonTexture.Height, "", m_ButtonFont);
+            l_Buttons.Add(m_Level3Button);
+            m_Level4Button = new Button(new Vector2(120, 130), m_Level4ButtonTexture, m_Level4ButtonTexture.Width, m_Level4ButtonTexture.Height, "", m_ButtonFont);
+            l_Buttons.Add(m_Level4Button);
+        }
+
+        // Called every frame from Game1
+        public void Update()
+        {
+            foreach (Button button in l_Buttons)
+            {
+                button.Update();
+            }
+        }
+
+        // Called every frame from Game1
+        public void Render(SpriteBatch m_SpriteBatch)
+        {
+            foreach (Button button in l_Buttons)
+            {
+                button.Render(m_SpriteBatch);
+            }
+        }
+    }
 }

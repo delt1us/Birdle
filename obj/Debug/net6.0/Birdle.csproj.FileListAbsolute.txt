@@ -32,3 +32,11 @@ C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Newtonsoft.
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\button.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Fonts\Button.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\TitleText.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\level1icon.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\level2icon.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\level3icon.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\level4icon.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\Level1.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\Level2.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\Level3.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\Level4.xnb

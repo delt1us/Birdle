@@ -30,6 +30,7 @@ namespace Birdle
         // Scene objects that determines what happens during what gamestate
         private SceneGame m_SceneGame;
         private SceneMainMenu m_SceneMainMenu;
+        private SceneLevelSelect m_SceneLevelSelect;
 
         public Game1()
         {
@@ -52,19 +53,22 @@ namespace Birdle
         {
             m_SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Loads game font
+            // Actual game scene
             SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");
             m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font);
 
+            // Main menu screen
             SpriteFont m_ButtonFont = Content.Load<SpriteFont>("Fonts/Button");
             Texture2D m_ButtonTexture = Content.Load<Texture2D>("Graphics/button");
             Texture2D m_TitleTextTexture = Content.Load<Texture2D>("Graphics/TitleText");
             m_SceneMainMenu = new SceneMainMenu(t_SCREEN_DIMENSIONS, m_ButtonTexture, m_ButtonFont, m_TitleTextTexture);
 
-            // Loads grid
-            Texture2D m_GridBorder = Content.Load<Texture2D>("Graphics/grid-border");
-            Texture2D m_GridTexture = Content.Load<Texture2D>("Graphics/numbered-grid");
-            m_SceneGame.LoadGrid(m_GridBorder, m_GridTexture);
+            // Level select screen
+            Texture2D m_Level1ButtonTexture = Content.Load<Texture2D>("Graphics/level1icon");
+            Texture2D m_Level2ButtonTexture = Content.Load<Texture2D>("Graphics/level2icon");
+            Texture2D m_Level3ButtonTexture = Content.Load<Texture2D>("Graphics/level3icon");
+            Texture2D m_Level4ButtonTexture = Content.Load<Texture2D>("Graphics/level4icon");
+            m_SceneLevelSelect = new SceneLevelSelect(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonFont);
 
             // Game data (information like high score, best time etc)
             // Check if file exists already
@@ -95,6 +99,12 @@ namespace Birdle
                 CheckButtonsInMainMenu();
             }
 
+            else if (str_GameState == "level select")
+            {
+                m_SceneLevelSelect.Update();
+                CheckButtonsInLevelSelect();
+            }
+
             base.Update(gameTime);
         }
         // Also runs every frame
@@ -114,10 +124,15 @@ namespace Birdle
             {
                 m_SceneGame.Render(m_SpriteBatch, m_PlayerData);
             }
+
             else if (str_GameState == "main menu")
             {
                 m_SceneMainMenu.Render(m_SpriteBatch);
-                // TODO check each button for what gamestate to switch to
+            }
+
+            else if (str_GameState == "level select")
+            {
+                m_SceneLevelSelect.Render(m_SpriteBatch);
             }
 
             m_SpriteBatch.End();
@@ -133,6 +148,61 @@ namespace Birdle
 
             m_SpriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        // Checks buttons in level select and loads gamescene
+        private void CheckButtonsInLevelSelect()
+        {
+            bool b_ButtonPressed = true;
+            Texture2D m_GridTexture = null;
+
+            if (m_SceneLevelSelect.m_Level1Button.b_Pressed)
+            {
+                // Load level 1
+                m_GridTexture = Content.Load<Texture2D>("Graphics/level1");
+            }
+
+            else if (m_SceneLevelSelect.m_Level2Button.b_Pressed)
+            {
+                // Load level 2
+                m_GridTexture = Content.Load<Texture2D>("Graphics/level2");
+            }
+
+            else if (m_SceneLevelSelect.m_Level3Button.b_Pressed)
+            {
+                // Load level 3
+                m_GridTexture = Content.Load<Texture2D>("Graphics/level3");
+            }
+
+            else if (m_SceneLevelSelect.m_Level4Button.b_Pressed)
+            {
+                // Load level 4
+                m_GridTexture = Content.Load<Texture2D>("Graphics/level4");
+            }
+
+            else
+            {
+                b_ButtonPressed = false;
+            }
+
+            if (b_ButtonPressed)
+            {
+                str_GameState = "game";
+                LoadGrid(m_GridTexture);
+
+                // Resets level select
+                foreach (Button button in m_SceneLevelSelect.l_Buttons)
+                {
+                    button.b_Pressed = false;
+                }
+            }
+        }
+
+        // Loads grid, used in a few places in CheckButtonsInLevelSelect
+        private void LoadGrid(Texture2D m_GridTexture)
+        {
+            Texture2D m_GridBorder = Content.Load<Texture2D>("Graphics/grid-border");
+            m_SceneGame.LoadGrid(m_GridBorder, m_GridTexture);
         }
 
         // Checks buttons in main menu and changes gamestate accordingly
