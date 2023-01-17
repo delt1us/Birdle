@@ -52,7 +52,7 @@ namespace Birdle
             str_GameState = "main menu";
 
             i_ClickState = 0;
-            b_GridSolved = false;   
+            b_GridSolved = false;
         }
 
         protected override void Initialize()
@@ -99,6 +99,61 @@ namespace Birdle
             // Add time since last frame to the timer
             float f_TimeElapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            // Checks mouse inputs to prevent 1 click pressing multiple buttons
+            CheckMouseInputs();
+
+            // Determines what to update
+            if (str_GameState == "game")
+            {
+                m_SceneGame.Update(f_TimeElapsed);
+                CheckButtonsInGame();
+                if (!b_GridSolved)
+                {
+                    CheckSolved();
+                }
+
+                if (b_GridSolved && m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity < 1f)
+                {
+                    m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity += f_TimeElapsed * (1f / f_SECONDS_FOR_LAST_TILE_TO_APPEAR);
+                    if (m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity > 1f)
+                    {
+                        m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity = 1f;
+                    }
+                }
+            }
+
+            else if (str_GameState == "main menu")
+            {
+                m_SceneMainMenu.Update(f_TimeElapsed);
+                CheckButtonsInMainMenu();
+            }
+
+            else if (str_GameState == "level select")
+            {
+                m_SceneLevelSelect.Update(m_PlayerData);
+                CheckButtonsInLevelSelect();
+            }
+
+            // Used for debug tools
+            CheckKeyboardInputs();
+
+            base.Update(gameTime);
+        }
+
+        private void CheckKeyboardInputs()
+        {
+            KeyboardState kstate = Keyboard.GetState();
+            // !For debugging 
+            // Resets playerdata
+            if (kstate.IsKeyDown(Keys.O))
+            {
+                CreateGameData();
+            }
+        }
+
+        // Checks mouse inputs, called in update()
+        private void CheckMouseInputs()
+        {
             MouseState m_MouseState = Mouse.GetState();
 
             // The following is to prevent multiple things happening for a single click
@@ -129,40 +184,6 @@ namespace Birdle
                     i_ClickState = 2;
                 }
             }
-
-            // Determines what to update
-            if (str_GameState == "game")
-            {
-                m_SceneGame.Update(f_TimeElapsed);
-                CheckButtonsInGame();
-                if (!b_GridSolved)
-                {
-                    CheckSolved();
-                }
-
-                if (b_GridSolved && m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity < 1f)
-                {
-                    m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity += f_TimeElapsed * (1f / f_SECONDS_FOR_LAST_TILE_TO_APPEAR);
-                    if (m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity > 1f)
-                    {
-                        m_SceneGame.m_Grid.m_InvisibleTile.f_Opacity = 1f;
-                    }
-                }
-            }
-
-            else if (str_GameState == "main menu")
-            {
-                m_SceneMainMenu.Update(f_TimeElapsed);
-                CheckButtonsInMainMenu();
-            }
-
-            else if (str_GameState == "level select")
-            {
-                m_SceneLevelSelect.Update();
-                CheckButtonsInLevelSelect();
-            }
-
-            base.Update(gameTime);
         }
 
         // Checks if grid is solved
@@ -189,7 +210,7 @@ namespace Birdle
             // Draws everything when the game is running (player solving puzzle)
             if (str_GameState == "game")
             {
-                m_SceneGame.Render(m_SpriteBatch, m_PlayerData);
+                m_SceneGame.Render(m_SpriteBatch);
             }
 
             else if (str_GameState == "main menu")
@@ -228,7 +249,7 @@ namespace Birdle
 
             if (m_SceneGame.m_BackButton.b_Pressed)
             {
-                str_GameState = "level select";
+                SwitchTo("level select");
                 m_SceneGame.m_BackButton.b_Pressed = false;
             }
         }
@@ -243,42 +264,37 @@ namespace Birdle
             }
 
             bool b_ButtonPressed = true;
-            Texture2D m_GridTexture = null;
-            int i_GridSquareSize = 0;
+            int i_LevelIndex = 999;
 
             if (m_SceneLevelSelect.m_Level1Button.b_Pressed)
             {
                 // Load level 1
-                m_GridTexture = Content.Load<Texture2D>("Graphics/level1");
-                i_GridSquareSize = 3;
+                i_LevelIndex = 0;
             }
 
             else if (m_SceneLevelSelect.m_Level2Button.b_Pressed)
             {
                 // Load level 2
-                m_GridTexture = Content.Load<Texture2D>("Graphics/level2");
-                i_GridSquareSize = 3;
+                i_LevelIndex = 1;
             }
 
             else if (m_SceneLevelSelect.m_Level3Button.b_Pressed)
             {
                 // Load level 3
-                m_GridTexture = Content.Load<Texture2D>("Graphics/level3");
-                i_GridSquareSize = 5;
+                i_LevelIndex = 2;
             }
 
             else if (m_SceneLevelSelect.m_Level4Button.b_Pressed)
             {
                 // Load level 4
-                m_GridTexture = Content.Load<Texture2D>("Graphics/level4");
-                i_GridSquareSize = 5;
+                i_LevelIndex = 3;
             }
 
             // Checks for back button being pressed
             else if (m_SceneLevelSelect.m_BackButton.b_Pressed)
             {
                 // Sets game to main menu
-                str_GameState = "main menu";
+                SwitchTo("main menu");
                 // To prevent level being started without texture                
                 b_ButtonPressed = false;
                 // Resets back button for future use
@@ -290,20 +306,32 @@ namespace Birdle
                 b_ButtonPressed = false;
             }
 
+            // If level is selected
             if (b_ButtonPressed)
             {
-                Texture2D borderTexture = Content.Load<Texture2D>("Graphics/grid-border");
-                m_SceneGame.MakeNewGrid(m_GridTexture, borderTexture, i_GridSquareSize, t_SCREEN_DIMENSIONS);
+                StartGame(i_LevelIndex);
+            }
+        }
 
-                // Resets game (sets timer to 0 and shuffles tiles)
-                m_SceneGame.Reset();
-                str_GameState = "game";
+        // Method to start the game with specified level
+        private void StartGame(int i_LevelIndex)
+        {
+            LoadGameData();
 
-                // Resets level select
-                foreach (Button button in m_SceneLevelSelect.l_Buttons)
-                {
-                    button.b_Pressed = false;
-                }
+            Texture2D gridTexture = Content.Load<Texture2D>($"Graphics/{m_PlayerData.a_Levels[i_LevelIndex].str_ImagePath}");
+            Texture2D borderTexture = Content.Load<Texture2D>("Graphics/grid-border");
+            m_SceneGame.MakeNewGrid(gridTexture, borderTexture, m_PlayerData.a_Levels[i_LevelIndex].i_GridSize, t_SCREEN_DIMENSIONS);
+            m_SceneGame.m_ActiveLevel = m_PlayerData.a_Levels[i_LevelIndex];
+            b_GridSolved = false;  
+
+            // Resets game (sets timer to 0 and shuffles tiles)
+            m_SceneGame.Reset();
+            SwitchTo("game");
+
+            // Resets level select
+            foreach (Button button in m_SceneLevelSelect.l_Buttons)
+            {
+                button.b_Pressed = false;
             }
         }
 
@@ -312,6 +340,15 @@ namespace Birdle
         {
             Texture2D m_GridBorder = Content.Load<Texture2D>("Graphics/grid-border");
             m_SceneGame.LoadGrid(m_GridBorder, m_GridTexture);
+        }
+
+        private void SwitchTo(string newGamestate)
+        {
+            str_GameState = newGamestate;
+            if (newGamestate == "level select")
+            {
+                SetLevelsActive();
+            }
         }
 
         // Checks buttons in main menu and changes gamestate accordingly
@@ -326,15 +363,15 @@ namespace Birdle
             // Checks buttons being pressed
             if (m_SceneMainMenu.m_PlayButton.b_Pressed)
             {
-                str_GameState = "level select";
+                SwitchTo("level select");
             }
             else if (m_SceneMainMenu.m_EndlessButton.b_Pressed)
             {
-                str_GameState = "endless";
+                SwitchTo("endless");
             }
             else if (m_SceneMainMenu.m_SettingsButton.b_Pressed)
             {
-                str_GameState = "settings";
+                SwitchTo("settings");
             }
             // Exits the game
             else if (m_SceneMainMenu.m_QuitButton.b_Pressed)
@@ -373,18 +410,36 @@ namespace Birdle
             File.WriteAllText(str_PATH, str_PlayerDataJson);
         }
 
+        // Used before level select is shown to determine what levels should be shown as unlocked
+        private void SetLevelsActive()
+        {
+            // Checks what levels are unlocked
+            for (int level = 0; level < m_SceneLevelSelect.l_Buttons.Count - 1; level++)
+            {
+                if (m_PlayerData.a_Levels[level].b_Completed)
+                {
+                    m_SceneLevelSelect.l_Buttons[level + 1].b_Active = true;
+                }
+                else
+                {
+                    m_SceneLevelSelect.l_Buttons[level + 1].b_Active = false;
+                }
+            }
+        }
+
         // Updates playerdata, called when game ends
         private void UpdatePlayerData()
         {
-            if (m_SceneGame.f_TimeSpentOnPuzzle < m_PlayerData.a_Levels[0].f_PersonalBestTime || m_PlayerData.a_Levels[0].f_PersonalBestTime == 0)
+            if (m_SceneGame.f_TimeSpentOnPuzzle < m_SceneGame.m_ActiveLevel.f_PersonalBestTime || m_SceneGame.m_ActiveLevel.f_PersonalBestTime == 0)
             {
-                m_PlayerData.a_Levels[0].f_PersonalBestTime = m_SceneGame.f_TimeSpentOnPuzzle;
+                m_SceneGame.m_ActiveLevel.f_PersonalBestTime = m_SceneGame.f_TimeSpentOnPuzzle;
             }
-            if (m_SceneGame.m_Grid.i_MovesMade < m_PlayerData.a_Levels[0].i_PersonalBestMoves || m_PlayerData.a_Levels[0].i_PersonalBestMoves == 0)
+            if (m_SceneGame.m_Grid.i_MovesMade < m_SceneGame.m_ActiveLevel.i_PersonalBestMoves || m_SceneGame.m_ActiveLevel.i_PersonalBestMoves == 0)
             {
-                m_PlayerData.a_Levels[0].i_PersonalBestMoves = m_SceneGame.m_Grid.i_MovesMade;
+                m_SceneGame.m_ActiveLevel.i_PersonalBestMoves = m_SceneGame.m_Grid.i_MovesMade;
             }
-            m_PlayerData.a_Levels[0].i_Attempts += 1;
+            m_SceneGame.m_ActiveLevel.i_Attempts += 1;
+            m_SceneGame.m_ActiveLevel.b_Completed = true;
         }
 
         // Override this so that game saves when the player quits the game

@@ -30,6 +30,7 @@ namespace Birdle
         private const int i_GRIDSIZE = 3;
 
         public Button m_BackButton;
+        public Level m_ActiveLevel;
 
         public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont)
         {
@@ -71,7 +72,7 @@ namespace Birdle
         }
 
         // Called every frame from Draw in Game1
-        public void Render(SpriteBatch m_SpriteBatch, PlayerData m_PlayerData)
+        public void Render(SpriteBatch m_SpriteBatch)
         {
             // Draws grid
             m_Grid.Render(m_SpriteBatch);
@@ -79,22 +80,22 @@ namespace Birdle
             m_SpriteBatch.Draw(m_Grid.m_GridBorderTexture, rec_SOLUTIONRECTANGLEBORDER, null, Color.White);
             m_SpriteBatch.Draw(m_Grid.m_Image, rec_SOLUTION_RECTANGLE, null, Color.White);
 
-            DrawText(m_SpriteBatch, m_PlayerData);
+            DrawText(m_SpriteBatch);
 
             m_BackButton.Render(m_SpriteBatch);
         }
 
         // Draws Text
-        private void DrawText(SpriteBatch m_SpriteBatch, PlayerData m_PlayerData)
+        private void DrawText(SpriteBatch m_SpriteBatch)
         {
             // Creates list
             List<string> l_StringsToDraw = new List<string>();
             // Adds to list
             l_StringsToDraw.Add($"Time: {(int)f_TimeSpentOnPuzzle}");
-            l_StringsToDraw.Add($"Best time: {Math.Round((m_PlayerData.a_Levels[0].f_PersonalBestTime), 2).ToString()} seconds");
+            l_StringsToDraw.Add($"Best time: {Math.Round((m_ActiveLevel.f_PersonalBestTime), 2).ToString()} seconds");
             l_StringsToDraw.Add($"Moves: {m_Grid.i_MovesMade}");
-            l_StringsToDraw.Add($"Personal best: {m_PlayerData.a_Levels[0].i_PersonalBestMoves.ToString()}");
-            l_StringsToDraw.Add($"Attemps: {m_PlayerData.a_Levels[0].i_Attempts.ToString()}");
+            l_StringsToDraw.Add($"Personal best: {m_ActiveLevel.i_PersonalBestMoves.ToString()}");
+            l_StringsToDraw.Add($"Attemps: {m_ActiveLevel.i_Attempts.ToString()}");
 
             // Makes mutable copy of text start location
             Vector2 vec_TextLocation = new Vector2(vec_TextStartLocation.X, vec_TextStartLocation.Y);
@@ -201,26 +202,29 @@ namespace Birdle
         // Creates all the button objects for this scene
         private void CreateButtons(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, Texture2D m_BackButtonTexture, SpriteFont m_ButtonFont)
         {
-            m_Level1Button = new Button(new Vector2(100, 650), m_Level1ButtonTexture, m_Level1ButtonTexture.Width, m_Level1ButtonTexture.Height, "", m_ButtonFont);
+            m_Level1Button = new Button(new Vector2(100, 650), m_Level1ButtonTexture, m_Level1ButtonTexture.Width, m_Level1ButtonTexture.Height, "level 1", m_ButtonFont, false);
             l_Buttons.Add(m_Level1Button);
-            m_Level2Button = new Button(new Vector2(500, 500), m_Level2ButtonTexture, m_Level2ButtonTexture.Width, m_Level2ButtonTexture.Height, "", m_ButtonFont);    
+            m_Level2Button = new Button(new Vector2(500, 500), m_Level2ButtonTexture, m_Level2ButtonTexture.Width, m_Level2ButtonTexture.Height, "level 2", m_ButtonFont, false);    
             l_Buttons.Add(m_Level2Button);
-            m_Level3Button = new Button(new Vector2(1200, 900), m_Level3ButtonTexture, m_Level3ButtonTexture.Width, m_Level3ButtonTexture.Height, "", m_ButtonFont);
+            m_Level3Button = new Button(new Vector2(1200, 900), m_Level3ButtonTexture, m_Level3ButtonTexture.Width, m_Level3ButtonTexture.Height, "level 3", m_ButtonFont, false);
             l_Buttons.Add(m_Level3Button);
-            m_Level4Button = new Button(new Vector2(120, 130), m_Level4ButtonTexture, m_Level4ButtonTexture.Width, m_Level4ButtonTexture.Height, "", m_ButtonFont);
+            m_Level4Button = new Button(new Vector2(120, 130), m_Level4ButtonTexture, m_Level4ButtonTexture.Width, m_Level4ButtonTexture.Height, "level 4", m_ButtonFont, false);
             l_Buttons.Add(m_Level4Button);
 
             m_BackButton = new Button(new Vector2(50, 850), m_BackButtonTexture, m_BackButtonTexture.Width, m_BackButtonTexture.Height, "Back", m_ButtonFont);
-            l_Buttons.Add(m_BackButton);
         }
 
         // Called every frame from Game1
-        public void Update()
+        public void Update(PlayerData m_PlayerData)
         {
             foreach (Button button in l_Buttons)
             {
-                button.Update();
+                if (button.b_Active)
+                {
+                    button.Update();
+                }
             }
+            m_BackButton.Update();
         }
 
         // Called every frame from Game1
@@ -230,6 +234,7 @@ namespace Birdle
             {
                 button.Render(m_SpriteBatch);
             }
+            m_BackButton.Render(m_SpriteBatch);
         }
     }
 }

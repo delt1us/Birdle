@@ -12,11 +12,16 @@ namespace Birdle
         private Texture2D m_Texture;
 
         private SpriteFont m_Font;
-        private string str_Text;
+        public string str_Text;
         private Vector2 vec_TextLocation;
 
         public bool b_Pressed;
-        public Button(Vector2 location, Texture2D texture, int width, int height, string text, SpriteFont font)
+        // Used to disable buttons
+        // Used in level select screen
+        public bool b_Active;
+        public bool b_TextVisible;
+
+        public Button(Vector2 location, Texture2D texture, int width, int height, string text, SpriteFont font, bool textVisible = true)
         {
             rec_ButtonHitbox = new Rectangle((int)location.X, (int)location.Y, width, height);
             m_Texture = texture;
@@ -32,6 +37,8 @@ namespace Birdle
             vec_TextLocation = new Vector2(f_XPosition + (float)rec_ButtonHitbox.X, f_YPosition + (float)rec_ButtonHitbox.Y);
 
             b_Pressed = false;
+            b_Active = true;    
+            b_TextVisible = textVisible;
         }
         // Called every frame
         public void Update()
@@ -48,8 +55,18 @@ namespace Birdle
         // Renders button on screen
         public void Render(SpriteBatch m_SpriteBatch)
         {
-            m_SpriteBatch.Draw(m_Texture, rec_ButtonHitbox, null, Color.White);
-            m_SpriteBatch.DrawString(m_Font, str_Text, vec_TextLocation, Color.Black);
+            if (b_Active)
+            {
+                m_SpriteBatch.Draw(m_Texture, rec_ButtonHitbox, null, Color.White);
+            }
+            else
+            {
+                m_SpriteBatch.Draw(m_Texture, rec_ButtonHitbox, null, Color.Black);
+            }
+            if (b_TextVisible)
+            {
+                m_SpriteBatch.DrawString(m_Font, str_Text, vec_TextLocation, Color.Black);
+            }
         }
 
         // Checks if given Point is in the button
