@@ -43,6 +43,7 @@ namespace Birdle
 
         private Song[] a_Songs;
         private SoundEffect m_TransitionSFX;
+        private bool b_MusicPlaying;
 
         // Everything is drawn to the render m_RenderTarget "m_RenderTarget"
         private RenderTarget2D m_RenderTarget;
@@ -62,6 +63,7 @@ namespace Birdle
             b_GridSolved = false;
             a_Songs = new Song[10];
             MediaPlayer.Volume = 0.4f;
+            b_MusicPlaying = false;
         }
 
         protected override void Initialize()
@@ -186,9 +188,13 @@ namespace Birdle
             base.Update(gameTime);
         }
 
+        // Should run when music ends
         void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
         {
-            PlayRandomSong();
+            if (b_MusicPlaying)
+            {
+                PlayRandomSong();
+            }
         }
 
         private void PlayTransitionSFX()
@@ -200,6 +206,8 @@ namespace Birdle
         {
             Random m_Random = new Random();
             MediaPlayer.Play(a_Songs[m_Random.Next(0, 10)]);
+            b_MusicPlaying = true;
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
         }
 
         private void CheckButtonsInEndless()
@@ -208,6 +216,7 @@ namespace Birdle
             {
                 SwitchTo("main menu");
                 m_SceneEndless.m_BackButton.b_Pressed = false;
+                b_MusicPlaying = false;
                 MediaPlayer.Stop();
             }
         }
@@ -342,6 +351,7 @@ namespace Birdle
             {
                 SwitchTo("level select");
                 m_SceneGame.m_BackButton.b_Pressed = false;
+                b_MusicPlaying = false;
                 MediaPlayer.Stop();
             }
         }

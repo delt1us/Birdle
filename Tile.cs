@@ -15,13 +15,13 @@ namespace Birdle
         public Point m_TargetLocation;
         public float f_Opacity;
 
-        public Tile(Rectangle rectangle, Rectangle sourceRectangle, Point gridCoordinates, Point originalLocation)
+        public Tile(Rectangle rectangle, Rectangle sourceRectangle, Point gridCoordinates)
         {
             b_IsVisible = true;
             m_GridCoordinates = gridCoordinates;
+            m_OriginalLocation = m_GridCoordinates;
             m_Rectangle = rectangle;
             m_SourceRectangle = sourceRectangle;
-            m_OriginalLocation = originalLocation;
             f_Opacity = 1f;
         }
 

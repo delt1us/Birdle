@@ -33,6 +33,7 @@ namespace Birdle
         private int i_Size;
 
         public bool b_Solved;
+        private bool b_Clicked;
 
         public Grid((int width, int height) t_ScreenDimensions, int size)
         {
@@ -120,7 +121,6 @@ namespace Birdle
                 {
                     // Determines direction to move tile
                     int i_move = m_Random.Next(1, 5);
-                    Debug.WriteLine($"Random number: {i_move}");
                     b_Moved = true;
 
                     // up
@@ -163,6 +163,59 @@ namespace Birdle
         private void HandleInputs()
         {
             KeyboardState kstate = Keyboard.GetState();
+            MouseState mstate = Mouse.GetState();
+
+            if (mstate.LeftButton == ButtonState.Released)
+            {
+                b_Clicked = false;
+            }
+
+            else if (mstate.LeftButton == ButtonState.Pressed && !b_Clicked)
+            {
+                b_Clicked = true;
+                foreach (Tile tile in a_Tiles)
+                {
+                    // If click location is on a tile and the tile isn't the invisible one
+                    if (tile.m_Rectangle.Contains(mstate.Position) && tile != m_InvisibleTile)
+                    {
+                        // List<Tile> l_SurroundingTiles = new List<Tile>();
+                        // // Check surrounding 4 tiles
+                        // // If not top
+                        // if (tile.m_GridCoordinates.Y > 0)
+                        // {
+                        //     l_SurroundingTiles.Add(a_Tiles[tile.m_GridCoordinates.X, tile.m_GridCoordinates.Y - 1]);
+                        // }
+                        // // If not bottom
+                        // if (tile.m_GridCoordinates.Y < i_Size - 1)
+                        // {
+                        //     l_SurroundingTiles.Add(a_Tiles[tile.m_GridCoordinates.X, tile.m_GridCoordinates.Y + 1]);
+                        // }
+                        // // If not left
+                        // if (tile.m_GridCoordinates.X > 0)
+                        // {
+                        //     l_SurroundingTiles.Add(a_Tiles[tile.m_GridCoordinates.X - 1, tile.m_GridCoordinates.Y]);
+                        // }
+                        // // If not right
+                        // if (tile.m_GridCoordinates.X < i_Size - 1)
+                        // {
+                        //     l_SurroundingTiles.Add(a_Tiles[tile.m_GridCoordinates.X + 1, tile.m_GridCoordinates.Y]);
+                        // }
+
+                        // bool b_InvisibleTile
+                        // foreach 
+
+                        // Checks if tile and invisible tile are adjacent
+                        if ((m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X - 1 && m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y) || 
+                            (m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X + 1 && m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y) ||
+                            (m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y - 1 && m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X) ||
+                            (m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y + 1 && m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X))
+                        {
+                            SwapTiles(m_InvisibleTile.m_GridCoordinates, tile.m_GridCoordinates);
+                        }
+                        break;
+                    }
+                }
+            }
 
             // Checks if keys are depressed
             CheckForKeysDepressed(kstate);
@@ -289,11 +342,13 @@ namespace Birdle
                 // Each column of the grid
                 for (int x = 0; x < i_Size; x++)
                 {
-                    Rectangle CurrentTileRectangle = new Rectangle(m_GridCoordinates.X + i_TileSize * x, m_GridCoordinates.Y + i_TileSize * y, i_TileSize, i_TileSize);
+                    Rectangle CurrentTileRectangle = new Rectangle(0, 0, i_TileSize, i_TileSize);
                     Rectangle CurrentTileRegionRectangle = new Rectangle(x * i_TileSize, y * i_TileSize, i_TileSize, i_TileSize);
                     Point TileGridCoordinates = new Point(x, y);
-                    Tile tile = new Tile(CurrentTileRectangle, CurrentTileRegionRectangle, TileGridCoordinates, new Point(x, y));
+                    Tile tile = new Tile(CurrentTileRectangle, CurrentTileRegionRectangle, TileGridCoordinates);
                     a_Tiles[x, y] = tile;
+                    MoveTile(tile, new Point(x, y));
+                    tile.UpdateLocation(0f, true);
                 }
             }
         }
