@@ -127,7 +127,7 @@ namespace Birdle
         private List<Button> l_Buttons;
         public Button m_PlayButton;
         public Button m_EndlessButton;
-        public Button m_SettingsButton;
+        public Button m_CreditsButton;
         public Button m_QuitButton;
         private Texture2D m_ButtonTexture;
         private Texture2D m_TitleTexture;
@@ -173,8 +173,8 @@ namespace Birdle
             l_Buttons.Add(m_PlayButton);
             m_EndlessButton = new Button(new Vector2(1000, 400), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Endless", m_ButtonFont, m_LargeButtonFont);
             l_Buttons.Add(m_EndlessButton);
-            m_SettingsButton = new Button(new Vector2(750, 600), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Settings", m_ButtonFont, m_LargeButtonFont);
-            l_Buttons.Add(m_SettingsButton);
+            m_CreditsButton = new Button(new Vector2(750, 600), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Credits", m_ButtonFont, m_LargeButtonFont);
+            l_Buttons.Add(m_CreditsButton);
             m_QuitButton = new Button(new Vector2(750, 800), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Quit", m_ButtonFont, m_LargeButtonFont);
             l_Buttons.Add(m_QuitButton);
 
@@ -286,6 +286,43 @@ namespace Birdle
             {
                 button.Render(m_SpriteBatch);
             }
+            m_BackButton.Render(m_SpriteBatch);
+        }
+    }
+
+    internal class SceneCredits
+    {
+        public Button m_BackButton;
+        private Texture2D m_BackgroundTexture;
+        private string str_CreditString;
+        private Texture2D m_TitleTexture;
+        private SpriteFont m_Font;
+        private Vector2 vec_TextLocation;
+
+        public SceneCredits(Texture2D m_BackButtonTexture, SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont, Texture2D backgroundTexture, Texture2D titleTexture, SpriteFont font)
+        {
+            m_BackButton = new Button(new Vector2(50, 850), m_BackButtonTexture, m_BackButtonTexture.Width, m_BackButtonTexture.Height, "Back", m_ButtonFont, m_LargeButtonFont);
+            m_BackButton.m_TextColor = Color.White;
+
+            m_BackgroundTexture = backgroundTexture;
+            m_TitleTexture = titleTexture;
+            m_Font = font;
+
+            str_CreditString = "Music by Rahetalius\nCheck licenses.txt for links";
+            Vector2 stringSize = m_Font.MeasureString(str_CreditString);
+            vec_TextLocation = new Vector2(220, 200 + stringSize.Y / 2f);
+        }
+
+        public void Update()
+        {
+            m_BackButton.Update();
+        }
+
+        public void Render(SpriteBatch m_SpriteBatch)
+        {
+            m_SpriteBatch.Draw(m_BackgroundTexture, new Vector2(0, 0), null, Color.White);
+            m_SpriteBatch.Draw(m_TitleTexture, new Vector2(200, 150), null, Color.White);
+            m_SpriteBatch.DrawString(m_Font, str_CreditString, vec_TextLocation, Color.White);
             m_BackButton.Render(m_SpriteBatch);
         }
     }

@@ -9,6 +9,7 @@
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Fonts/Default.spritefont</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/button.png</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/clouds.png</File>
+    <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/CreditsText.png</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/game-background.png</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/grid-border.png</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/level-select-screen.png</File>
@@ -25,6 +26,7 @@
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/TitleText.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

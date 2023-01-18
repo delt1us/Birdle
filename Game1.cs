@@ -33,6 +33,7 @@ namespace Birdle
         private SceneGame m_SceneGame;
         private SceneMainMenu m_SceneMainMenu;
         private SceneLevelSelect m_SceneLevelSelect;
+        private SceneCredits m_SceneCredits;
 
         private int i_ClickState;
         private bool b_GridSolved;
@@ -85,6 +86,10 @@ namespace Birdle
             Texture2D m_Level4ButtonTexture = Content.Load<Texture2D>("Graphics/level4icon");
             Texture2D m_LevelSelectBackgroundTexture = Content.Load<Texture2D>("Graphics/level-select-screen");
             m_SceneLevelSelect = new SceneLevelSelect(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_LevelSelectBackgroundTexture);
+
+            // Credits screen
+            Texture2D m_CreditsTitleText = Content.Load<Texture2D>("Graphics/CreditsText");
+            m_SceneCredits = new SceneCredits(m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_GameBackgroundTexture, m_CreditsTitleText, m_Font);
 
             // Game data (information like high score, best time etc)
             // Check if file exists already
@@ -139,10 +144,24 @@ namespace Birdle
                 CheckButtonsInLevelSelect();
             }
 
+            else if (str_GameState == "credits")
+            {
+                m_SceneCredits.Update();
+                CheckButtonsInCredits();
+            }
+
             // Used for debug tools
             CheckKeyboardInputs();
 
             base.Update(gameTime);
+        }
+
+        private void CheckButtonsInCredits()
+        {
+            if (m_SceneCredits.m_BackButton.b_Pressed)
+            {
+                SwitchTo("main menu");
+            }
         }
 
         private void CheckKeyboardInputs()
@@ -226,6 +245,11 @@ namespace Birdle
             else if (str_GameState == "level select")
             {
                 m_SceneLevelSelect.Render(m_SpriteBatch);
+            }
+
+            else if (str_GameState == "credits")
+            {
+                m_SceneCredits.Render(m_SpriteBatch);
             }
 
             m_SpriteBatch.End();
@@ -374,9 +398,9 @@ namespace Birdle
             {
                 SwitchTo("endless");
             }
-            else if (m_SceneMainMenu.m_SettingsButton.b_Pressed)
+            else if (m_SceneMainMenu.m_CreditsButton.b_Pressed)
             {
-                SwitchTo("settings");
+                SwitchTo("credits");
             }
             // Exits the game
             else if (m_SceneMainMenu.m_QuitButton.b_Pressed)

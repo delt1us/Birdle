@@ -82,6 +82,18 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/clouds.png
 
+#begin Graphics/CreditsText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/CreditsText.png
+
 #begin Graphics/game-background.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -393,6 +405,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/title-screen.png
+
+#begin Graphics/TitleText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/TitleText.png
 
 #begin Graphics/TitleText.png
 /importer:TextureImporter
