@@ -23,7 +23,6 @@ namespace Birdle
         public bool b_Active;
         public bool b_TextVisible;
         public Color m_TextColor;
-        private Vector2 vec_Location;
         private Vector2 vec_TextSize;
 
         public Button(Vector2 location, Texture2D texture, int width, int height, string text, SpriteFont font, SpriteFont largeFont, bool textVisible = true)
