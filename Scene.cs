@@ -15,7 +15,7 @@ namespace Birdle
         private static Rectangle rec_SOLUTIONRECTANGLEBORDER = new Rectangle(rec_SOLUTION_RECTANGLE.X - 5, rec_SOLUTION_RECTANGLE.Y - 5, 410, 410);
 
         // Used for text shown in top left
-        private static Vector2 vec_TextStartLocation = new Vector2(60, 140);
+        protected static Vector2 vec_TextStartLocation = new Vector2(60, 140);
 
         // Grid object
         public Grid m_Grid;
@@ -24,15 +24,12 @@ namespace Birdle
         public float f_TimeSpentOnPuzzle;
 
         // Font for drawing info on screen
-        private SpriteFont m_Font;
-
-        // Determines the dimensions of the grid (not scale)
-        private const int i_GRIDSIZE = 3;
+        protected SpriteFont m_Font;
 
         public Button m_BackButton;
         public Level m_ActiveLevel;
 
-        private Texture2D m_BackgroundTexture;
+        protected Texture2D m_BackgroundTexture;
 
         public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont, SpriteFont largeButtonFont, Texture2D backgroundTexture)
         {
@@ -59,7 +56,7 @@ namespace Birdle
         }
 
         // Called every frame from Update in Game1
-        public void Update(float f_TimeElapsed)
+        public virtual void Update(float f_TimeElapsed)
         {
             if (!m_Grid.b_Solved)
             {
@@ -90,7 +87,7 @@ namespace Birdle
         }
 
         // Draws Text
-        private void DrawText(SpriteBatch m_SpriteBatch)
+        protected virtual void DrawText(SpriteBatch m_SpriteBatch)
         {
             // Creates list
             List<string> l_StringsToDraw = new List<string>();
@@ -118,6 +115,63 @@ namespace Birdle
             m_Grid = new Grid(screenDimensions, size);
             LoadGrid(borderTexture, texture);
         }
+    }
+
+    internal class SceneEndless : SceneGame
+    {
+        private List<Texture2D> l_Textures;
+        private Texture2D m_GridBorderTexture;
+        private (int width, int height) t_ScreenDimensions;
+        public int i_PuzzlesCompleted;
+
+        public SceneEndless((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont, SpriteFont largeButtonFont, Texture2D backgroundTexture, List<Texture2D> textures, Texture2D gridBorderTexture) : base(t_SCREEN_DIMENSIONS, font, backButtonTexture, backButtonFont, largeButtonFont, backgroundTexture)
+        {
+            l_Textures = textures;
+            m_GridBorderTexture = gridBorderTexture;
+            t_ScreenDimensions = t_SCREEN_DIMENSIONS;
+            i_PuzzlesCompleted = 0;
+
+            Random m_Random = new Random();
+            MakeNewGrid(l_Textures[m_Random.Next(0, l_Textures.Count)], m_GridBorderTexture, 3, t_ScreenDimensions);
+            m_Grid.ShuffleTiles();
+        }
+
+        public override void Update(float f_TimeElapsed)
+        {
+            f_TimeSpentOnPuzzle += f_TimeElapsed;
+
+            if(m_Grid.b_Solved)
+            {
+                i_PuzzlesCompleted++;
+                Random m_Random = new Random();
+                MakeNewGrid(l_Textures[m_Random.Next(0, l_Textures.Count)], m_GridBorderTexture, 3, t_ScreenDimensions);
+                m_Grid.ShuffleTiles();
+            }
+
+            m_Grid.Update(f_TimeElapsed);
+            m_BackButton.Update();
+        }
+
+        protected override void DrawText(SpriteBatch m_SpriteBatch)
+        {
+            // Creates list
+            List<string> l_StringsToDraw = new List<string>();
+            // Adds to list
+            l_StringsToDraw.Add($"Time: {(int)f_TimeSpentOnPuzzle}");
+            l_StringsToDraw.Add($"Moves: {m_Grid.i_MovesMade}");
+            l_StringsToDraw.Add($"PuzzlesFinished: {i_PuzzlesCompleted}");
+
+            // Makes mutable copy of text start location
+            Vector2 vec_TextLocation = new Vector2(vec_TextStartLocation.X, vec_TextStartLocation.Y);
+            int i_LineSpacing = m_Font.LineSpacing;
+            // Adds items in list to spritebatch
+            foreach (string text in l_StringsToDraw)
+            {
+                m_SpriteBatch.DrawString(m_Font, text, vec_TextLocation, Color.Black);
+                vec_TextLocation.Y += i_LineSpacing;
+            }
+        }
+
     }
 
     // The main menu

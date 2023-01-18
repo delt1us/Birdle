@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,6 +35,7 @@ namespace Birdle
         private SceneMainMenu m_SceneMainMenu;
         private SceneLevelSelect m_SceneLevelSelect;
         private SceneCredits m_SceneCredits;
+        private SceneEndless m_SceneEndless;
 
         private int i_ClickState;
         private bool b_GridSolved;
@@ -61,6 +63,9 @@ namespace Birdle
 
         protected override void Initialize()
         {
+            // Loads playerdata
+            LoadGameData();
+
             base.Initialize();
         }
 
@@ -81,6 +86,13 @@ namespace Birdle
             SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");
             Texture2D m_GameBackgroundTexture = Content.Load<Texture2D>("Graphics/game-background");
             m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_GameBackgroundTexture);
+
+            // Endless game scene
+            List<Texture2D> l_Textures = new List<Texture2D>();
+            l_Textures.Add(Content.Load<Texture2D>("Graphics/level1"));
+            l_Textures.Add(Content.Load<Texture2D>("Graphics/level2"));
+            Texture2D m_GridBorderTexture = Content.Load<Texture2D>("Graphics/grid-border");
+            m_SceneEndless = new SceneEndless(t_SCREEN_DIMENSIONS, m_Font, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_GameBackgroundTexture, l_Textures, m_GridBorderTexture);
 
             // Level select screen
             Texture2D m_Level1ButtonTexture = Content.Load<Texture2D>("Graphics/level1icon");
@@ -159,10 +171,37 @@ namespace Birdle
                 CheckButtonsInCredits();
             }
 
+            else if (str_GameState == "endless")
+            {
+                m_SceneEndless.Update(f_TimeElapsed);
+                CheckButtonsInEndless();
+            }
+
             // Used for debug tools
             CheckKeyboardInputs();
 
             base.Update(gameTime);
+        }
+
+        void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
+        {
+            PlayRandomSong();
+        }
+
+        private void PlayRandomSong()
+        {
+            Random m_Random = new Random();
+            MediaPlayer.Play(a_Songs[m_Random.Next(0, 10)]);
+        }
+
+        private void CheckButtonsInEndless()
+        {
+            if (m_SceneEndless.m_BackButton.b_Pressed)
+            {
+                SwitchTo("main menu");
+                m_SceneEndless.m_BackButton.b_Pressed = false;
+                MediaPlayer.Stop();
+            }
         }
 
         private void CheckButtonsInCredits()
@@ -170,6 +209,7 @@ namespace Birdle
             if (m_SceneCredits.m_BackButton.b_Pressed)
             {
                 SwitchTo("main menu");
+                m_SceneCredits.m_BackButton.b_Pressed = false;
             }
         }
 
@@ -259,6 +299,11 @@ namespace Birdle
             else if (str_GameState == "credits")
             {
                 m_SceneCredits.Render(m_SpriteBatch);
+            }
+
+            else if (str_GameState == "endless")
+            {
+                m_SceneEndless.Render(m_SpriteBatch);
             }
 
             m_SpriteBatch.End();
@@ -388,10 +433,9 @@ namespace Birdle
             {
                 SetLevelsActive();
             }
-            else if (newGamestate == "game")
+            else if (newGamestate == "game" || newGamestate == "endless")
             {
-                Random m_Random = new Random();
-                MediaPlayer.Play(a_Songs[m_Random.Next(0, 10)]);
+            PlayRandomSong();
             }
         }
 
@@ -486,6 +530,7 @@ namespace Birdle
             {
                 m_SceneGame.m_ActiveLevel.i_PersonalBestMoves = m_SceneGame.m_Grid.i_MovesMade;
             }
+
             m_SceneGame.m_ActiveLevel.i_Attempts += 1;
             m_SceneGame.m_ActiveLevel.b_Completed = true;
         }
