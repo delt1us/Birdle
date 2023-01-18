@@ -62,13 +62,13 @@ namespace Birdle
         }
 
         // Called every frame from Game1 Update()
-        public void Update()
+        public void Update(float f_TimeElapsed)
         {
             HandleInputs();
 
             foreach (Tile tile in a_Tiles)
             {
-                tile.Update();
+                tile.Update(f_TimeElapsed);
             }
 
             // If solved
@@ -154,6 +154,11 @@ namespace Birdle
                 {
                     MoveTile(a_Tiles[x, y], new Point(x, y));
                 }
+            }
+
+            foreach (Tile tile in a_Tiles)
+            {
+                tile.UpdateLocation(0f, true);
             }
         }
 
@@ -264,7 +269,7 @@ namespace Birdle
 
             // Moves tile rectangle so it is drawn properly
             int i_TileSize = (int)(i_GridSideLength / i_Size);
-            tile.m_Rectangle.Location = new Point(m_GridCoordinates.X + i_TileSize * destination.X, m_GridCoordinates.Y + i_TileSize * destination.Y);
+            tile.m_TargetLocation = new Point(m_GridCoordinates.X + i_TileSize * destination.X, m_GridCoordinates.Y + i_TileSize * destination.Y);
 
             // Moves tile in tile array
             a_Tiles[destination.X, destination.Y] = tile;

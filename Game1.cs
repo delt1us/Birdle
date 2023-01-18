@@ -70,7 +70,8 @@ namespace Birdle
             Texture2D m_ButtonTexture = Content.Load<Texture2D>("Graphics/button");
             Texture2D m_TitleTextTexture = Content.Load<Texture2D>("Graphics/TitleText");
             Texture2D m_BackgroundTexture = Content.Load<Texture2D>("Graphics/title-screen");
-            m_SceneMainMenu = new SceneMainMenu(t_SCREEN_DIMENSIONS, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_TitleTextTexture, m_BackgroundTexture);
+            Texture2D m_CloudTextures = Content.Load<Texture2D>("Graphics/clouds");
+            m_SceneMainMenu = new SceneMainMenu(t_SCREEN_DIMENSIONS, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_TitleTextTexture, m_BackgroundTexture, m_CloudTextures);
 
             // Actual game scene
             SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");

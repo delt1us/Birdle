@@ -68,7 +68,7 @@ namespace Birdle
             }
 
             // Updates grid
-            m_Grid.Update();
+            m_Grid.Update(f_TimeElapsed);
 
             // Update back button
             m_BackButton.Update();
@@ -133,8 +133,9 @@ namespace Birdle
         private Texture2D m_TitleTexture;
         private Vector2 m_TitleLocation;
         private Texture2D m_BackgroundTexture;
+        private Cloud[] a_Clouds;
 
-        public SceneMainMenu((int width, int height) t_SCREEN_DIMENSIONS, Texture2D buttton_texture, SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont, Texture2D title_text_texture, Texture2D backgroundTexture)
+        public SceneMainMenu((int width, int height) t_SCREEN_DIMENSIONS, Texture2D buttton_texture, SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont, Texture2D title_text_texture, Texture2D backgroundTexture, Texture2D cloudTextures)
         {
             l_Buttons = new List<Button>();
             m_ButtonTexture = buttton_texture;
@@ -142,11 +143,31 @@ namespace Birdle
             m_TitleLocation = new Vector2(((float)t_SCREEN_DIMENSIONS.width - m_TitleTexture.Width) / 2f, 150);
             m_BackgroundTexture = backgroundTexture;
 
+            CreateClouds(cloudTextures);
             CreateButtons(m_ButtonFont, m_LargeButtonFont);
         }
 
+        // Creates clouds
+        private void CreateClouds(Texture2D cloudTextures)
+        {  
+            float cloudSpeedMultiplier = 1f;
+            a_Clouds = new Cloud[5];
+            Rectangle cloudArea = new Rectangle(1, 1, 501, 301);
+            a_Clouds[0] = new Cloud(cloudTextures, new Vector2(20, 0), 1, 5f * cloudSpeedMultiplier, cloudArea);
+            cloudArea.X = 503;
+            a_Clouds[1] = new Cloud(cloudTextures, new Vector2(1730, 350), -1, 3f * cloudSpeedMultiplier, cloudArea);
+            cloudArea.X = 1;
+            cloudArea.Y = 303;
+            a_Clouds[2] = new Cloud(cloudTextures, new Vector2(320, 110), 1, 6f * cloudSpeedMultiplier, cloudArea);
+            cloudArea.X = 503;
+            a_Clouds[3] = new Cloud(cloudTextures, new Vector2(40, 660), 1, 8f * cloudSpeedMultiplier, cloudArea);
+            cloudArea.X = 1;
+            cloudArea.Y = 605;
+            a_Clouds[4] = new Cloud(cloudTextures, new Vector2(1320, 900), -1, 10f * cloudSpeedMultiplier, cloudArea);
+        }
+
         // Creates and adds buttons to list 
-        public void CreateButtons(SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont)
+        private void CreateButtons(SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont)
         {
             m_PlayButton = new Button(new Vector2(510, 400), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Play", m_ButtonFont, m_LargeButtonFont);
             l_Buttons.Add(m_PlayButton);
@@ -179,6 +200,11 @@ namespace Birdle
             {
                 button.Update();
             }
+
+            foreach (Cloud cloud in a_Clouds)
+            {
+                cloud.Update(f_TimeSinceLastFrame);
+            }
         }
 
         // Called every frame from Draw in Game1
@@ -186,6 +212,11 @@ namespace Birdle
         {
             // Draw background
             m_SpriteBatch.Draw(m_BackgroundTexture, new Vector2(0, 0), null, Color.White);
+
+            foreach (Cloud cloud in a_Clouds)
+            {
+                cloud.Render(m_SpriteBatch);
+            }
 
             foreach (Button button in l_Buttons)
             {

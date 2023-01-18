@@ -44,3 +44,4 @@ C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Gra
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Fonts\ButtonLarge.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\level-select-screen.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\game-background.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\clouds.xnb
