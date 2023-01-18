@@ -32,13 +32,13 @@ namespace Birdle
         public Button m_BackButton;
         public Level m_ActiveLevel;
 
-        public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont)
+        public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont, SpriteFont largeButtonFont)
         {
             f_TimeSpentOnPuzzle = 0f;
 
             m_Font = font;
 
-            m_BackButton = new Button(new Vector2(50, 850), backButtonTexture, backButtonTexture.Width, backButtonTexture.Height, "Back", backButtonFont);
+            m_BackButton = new Button(new Vector2(50, 850), backButtonTexture, backButtonTexture.Width, backButtonTexture.Height, "Back", backButtonFont, largeButtonFont);
         }
 
         public void Reset()
@@ -128,28 +128,35 @@ namespace Birdle
         private Texture2D m_ButtonTexture;
         private Texture2D m_TitleTexture;
         private Vector2 m_TitleLocation;
+        private Texture2D m_BackgroundTexture;
 
-        public SceneMainMenu((int width, int height) t_SCREEN_DIMENSIONS, Texture2D buttton_texture, SpriteFont m_ButtonFont, Texture2D title_text_texture)
+        public SceneMainMenu((int width, int height) t_SCREEN_DIMENSIONS, Texture2D buttton_texture, SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont, Texture2D title_text_texture, Texture2D backgroundTexture)
         {
             l_Buttons = new List<Button>();
             m_ButtonTexture = buttton_texture;
             m_TitleTexture = title_text_texture;
             m_TitleLocation = new Vector2(((float)t_SCREEN_DIMENSIONS.width - m_TitleTexture.Width) / 2f, 150);
+            m_BackgroundTexture = backgroundTexture;
 
-            CreateButtons(m_ButtonFont);
+            CreateButtons(m_ButtonFont, m_LargeButtonFont);
         }
 
         // Creates and adds buttons to list 
-        public void CreateButtons(SpriteFont m_ButtonFont)
+        public void CreateButtons(SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont)
         {
-            m_PlayButton = new Button(new Vector2(510, 400), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Play", m_ButtonFont);
+            m_PlayButton = new Button(new Vector2(510, 400), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Play", m_ButtonFont, m_LargeButtonFont);
             l_Buttons.Add(m_PlayButton);
-            m_EndlessButton = new Button(new Vector2(1000, 400), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Endless", m_ButtonFont);
+            m_EndlessButton = new Button(new Vector2(1000, 400), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Endless", m_ButtonFont, m_LargeButtonFont);
             l_Buttons.Add(m_EndlessButton);
-            m_SettingsButton = new Button(new Vector2(750, 600), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Settings", m_ButtonFont);
+            m_SettingsButton = new Button(new Vector2(750, 600), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Settings", m_ButtonFont, m_LargeButtonFont);
             l_Buttons.Add(m_SettingsButton);
-            m_QuitButton = new Button(new Vector2(750, 800), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Quit", m_ButtonFont);
+            m_QuitButton = new Button(new Vector2(750, 800), m_ButtonTexture, m_ButtonTexture.Width, m_ButtonTexture.Height, "Quit", m_ButtonFont, m_LargeButtonFont);
             l_Buttons.Add(m_QuitButton);
+
+            foreach (Button button in l_Buttons)
+            {
+                button.m_TextColor = Color.White;
+            }
         }
 
         // Resets pressed value of all buttons to false
@@ -173,6 +180,9 @@ namespace Birdle
         // Called every frame from Draw in Game1
         public void Render(SpriteBatch m_SpriteBatch)
         {
+            // Draw background
+            m_SpriteBatch.Draw(m_BackgroundTexture, new Vector2(0, 0), null, Color.White);
+
             foreach (Button button in l_Buttons)
             {
                 button.Render(m_SpriteBatch);
@@ -193,25 +203,25 @@ namespace Birdle
         public Button m_Level4Button;
         public Button m_BackButton;
 
-        public SceneLevelSelect(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, Texture2D m_BackButtonTexture, SpriteFont m_ButtonFont)
+        public SceneLevelSelect(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, Texture2D m_BackButtonTexture, SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont)
         {
             l_Buttons = new List<Button>();
-            CreateButtons(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_BackButtonTexture, m_ButtonFont);
+            CreateButtons(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_BackButtonTexture, m_ButtonFont, m_LargeButtonFont);
         }
 
         // Creates all the button objects for this scene
-        private void CreateButtons(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, Texture2D m_BackButtonTexture, SpriteFont m_ButtonFont)
+        private void CreateButtons(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, Texture2D m_BackButtonTexture, SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont)
         {
-            m_Level1Button = new Button(new Vector2(100, 650), m_Level1ButtonTexture, m_Level1ButtonTexture.Width, m_Level1ButtonTexture.Height, "level 1", m_ButtonFont, false);
+            m_Level1Button = new Button(new Vector2(100, 650), m_Level1ButtonTexture, m_Level1ButtonTexture.Width, m_Level1ButtonTexture.Height, "level 1", m_ButtonFont, m_LargeButtonFont, false);
             l_Buttons.Add(m_Level1Button);
-            m_Level2Button = new Button(new Vector2(500, 500), m_Level2ButtonTexture, m_Level2ButtonTexture.Width, m_Level2ButtonTexture.Height, "level 2", m_ButtonFont, false);    
+            m_Level2Button = new Button(new Vector2(500, 500), m_Level2ButtonTexture, m_Level2ButtonTexture.Width, m_Level2ButtonTexture.Height, "level 2", m_ButtonFont, m_LargeButtonFont, false);    
             l_Buttons.Add(m_Level2Button);
-            m_Level3Button = new Button(new Vector2(1200, 900), m_Level3ButtonTexture, m_Level3ButtonTexture.Width, m_Level3ButtonTexture.Height, "level 3", m_ButtonFont, false);
+            m_Level3Button = new Button(new Vector2(1200, 900), m_Level3ButtonTexture, m_Level3ButtonTexture.Width, m_Level3ButtonTexture.Height, "level 3", m_ButtonFont, m_LargeButtonFont, false);
             l_Buttons.Add(m_Level3Button);
-            m_Level4Button = new Button(new Vector2(120, 130), m_Level4ButtonTexture, m_Level4ButtonTexture.Width, m_Level4ButtonTexture.Height, "level 4", m_ButtonFont, false);
+            m_Level4Button = new Button(new Vector2(120, 130), m_Level4ButtonTexture, m_Level4ButtonTexture.Width, m_Level4ButtonTexture.Height, "level 4", m_ButtonFont, m_LargeButtonFont, false);
             l_Buttons.Add(m_Level4Button);
 
-            m_BackButton = new Button(new Vector2(50, 850), m_BackButtonTexture, m_BackButtonTexture.Width, m_BackButtonTexture.Height, "Back", m_ButtonFont);
+            m_BackButton = new Button(new Vector2(50, 850), m_BackButtonTexture, m_BackButtonTexture.Width, m_BackButtonTexture.Height, "Back", m_ButtonFont, m_LargeButtonFont);
         }
 
         // Called every frame from Game1

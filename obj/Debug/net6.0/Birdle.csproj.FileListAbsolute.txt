@@ -40,3 +40,5 @@ C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Gra
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\Level2.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\Level3.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\Level4.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Graphics\title-screen.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Fonts\ButtonLarge.xnb

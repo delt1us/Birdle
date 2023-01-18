@@ -66,20 +66,22 @@ namespace Birdle
 
             // Main menu screen
             SpriteFont m_ButtonFont = Content.Load<SpriteFont>("Fonts/Button");
+            SpriteFont m_LargeButtonFont = Content.Load<SpriteFont>("Fonts/ButtonLarge");
             Texture2D m_ButtonTexture = Content.Load<Texture2D>("Graphics/button");
             Texture2D m_TitleTextTexture = Content.Load<Texture2D>("Graphics/TitleText");
-            m_SceneMainMenu = new SceneMainMenu(t_SCREEN_DIMENSIONS, m_ButtonTexture, m_ButtonFont, m_TitleTextTexture);
+            Texture2D m_BackgroundTexture = Content.Load<Texture2D>("Graphics/title-screen");
+            m_SceneMainMenu = new SceneMainMenu(t_SCREEN_DIMENSIONS, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_TitleTextTexture, m_BackgroundTexture);
 
             // Actual game scene
             SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");
-            m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font, m_ButtonTexture, m_ButtonFont);
+            m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont);
 
             // Level select screen
             Texture2D m_Level1ButtonTexture = Content.Load<Texture2D>("Graphics/level1icon");
             Texture2D m_Level2ButtonTexture = Content.Load<Texture2D>("Graphics/level2icon");
             Texture2D m_Level3ButtonTexture = Content.Load<Texture2D>("Graphics/level3icon");
             Texture2D m_Level4ButtonTexture = Content.Load<Texture2D>("Graphics/level4icon");
-            m_SceneLevelSelect = new SceneLevelSelect(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonTexture, m_ButtonFont);
+            m_SceneLevelSelect = new SceneLevelSelect(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont);
 
             // Game data (information like high score, best time etc)
             // Check if file exists already
@@ -212,7 +214,7 @@ namespace Birdle
             {
                 m_SceneGame.Render(m_SpriteBatch);
             }
-
+ 
             else if (str_GameState == "main menu")
             {
                 m_SceneMainMenu.Render(m_SpriteBatch);
@@ -430,6 +432,10 @@ namespace Birdle
         // Updates playerdata, called when game ends
         private void UpdatePlayerData()
         {
+            if (m_SceneGame.m_ActiveLevel == null)
+            {
+                return;
+            }
             if (m_SceneGame.f_TimeSpentOnPuzzle < m_SceneGame.m_ActiveLevel.f_PersonalBestTime || m_SceneGame.m_ActiveLevel.f_PersonalBestTime == 0)
             {
                 m_SceneGame.m_ActiveLevel.f_PersonalBestTime = m_SceneGame.f_TimeSpentOnPuzzle;

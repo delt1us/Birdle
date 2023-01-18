@@ -5,6 +5,7 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Fonts/Button.spritefont</File>
+    <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Fonts/ButtonLarge.spritefont</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Fonts/Default.spritefont</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/button.png</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/grid-border.png</File>
@@ -17,9 +18,12 @@
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/Level4.png</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/level4icon.png</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/numbered-grid.png</File>
+    <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/title-screen.png</File>
     <File>C:/Users/Deltius/Documents/Projects/Module 2/Birdle/Content/Graphics/TitleText.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
