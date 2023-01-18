@@ -199,7 +199,7 @@ namespace Birdle
 
         private void PlayTransitionSFX()
         {
-            m_TransitionSFX.CreateInstance().Play();
+            // m_TransitionSFX.CreateInstance().Play();
         }
 
         private void PlayRandomSong()
