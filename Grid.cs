@@ -41,7 +41,7 @@ namespace Birdle
             // Creates 2D array 
             a_Tiles = new Tile[i_Size, i_Size];
 
-            b_Solved = false;   
+            b_Solved = false;
 
             // Centers the grid
             m_GridCoordinates = new Point((int)((t_ScreenDimensions.width - i_GridSideLength) / 2f), (int)((t_ScreenDimensions.height - i_GridSideLength) / 2f));
@@ -59,13 +59,16 @@ namespace Birdle
             i_MovesMade = 0;
 
             CreateTiles();
-            SetRandomTileInvisible();
+            SetInvisibleTile();
         }
 
         // Called every frame from Game1 Update()
         public void Update(float f_TimeElapsed)
         {
-            HandleInputs();
+            if (!b_Solved)
+            {
+                HandleInputs();
+            }
 
             foreach (Tile tile in a_Tiles)
             {
@@ -142,7 +145,7 @@ namespace Birdle
                     }
 
                     // left
-                    else if (i_move == 4  && m_InvisibleTile.m_GridCoordinates.X > 0)
+                    else if (i_move == 4 && m_InvisibleTile.m_GridCoordinates.X > 0)
                     {
                         SwapTiles(m_InvisibleTile.m_GridCoordinates, new Point(m_InvisibleTile.m_GridCoordinates.X - 1, m_InvisibleTile.m_GridCoordinates.Y), false);
                     }
@@ -205,7 +208,7 @@ namespace Birdle
                         // foreach 
 
                         // Checks if tile and invisible tile are adjacent
-                        if ((m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X - 1 && m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y) || 
+                        if ((m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X - 1 && m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y) ||
                             (m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X + 1 && m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y) ||
                             (m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y - 1 && m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X) ||
                             (m_InvisibleTile.m_GridCoordinates.Y == tile.m_GridCoordinates.Y + 1 && m_InvisibleTile.m_GridCoordinates.X == tile.m_GridCoordinates.X))
@@ -353,19 +356,14 @@ namespace Birdle
             }
         }
 
-        // Sets a random tile to be invisible
-        private void SetRandomTileInvisible()
+        // Sets bottom right tile to be invisible
+        private void SetInvisibleTile()
         {
-            // Picks a random tile
-            Random m_Random = new Random();
-            int row = m_Random.Next(0, i_Size);
-            int column = m_Random.Next(0, i_Size);
-
             // Makes tile be invisible
-            a_Tiles[column, row].f_Opacity = 0f;
+            a_Tiles[i_Size - 1, i_Size - 1].f_Opacity = 0f;
 
             // Used for moving tile around
-            m_InvisibleTile = a_Tiles[column, row];
+            m_InvisibleTile = a_Tiles[i_Size - 1, i_Size - 1];
         }
     }
 }

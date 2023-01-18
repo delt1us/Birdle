@@ -62,9 +62,9 @@ namespace Birdle
             {
                 // Updates timer
                 f_TimeSpentOnPuzzle += f_TimeElapsed;
-                // Updates grid
-                m_Grid.Update(f_TimeElapsed);
             }
+            // Updates grid
+            m_Grid.Update(f_TimeElapsed);
 
             // Update back button
             m_BackButton.Update();
