@@ -203,10 +203,14 @@ namespace Birdle
         public Button m_Level4Button;
         public Button m_BackButton;
 
-        public SceneLevelSelect(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, Texture2D m_BackButtonTexture, SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont)
+        private Texture2D m_BackgroundTexture;
+
+        public SceneLevelSelect(Texture2D m_Level1ButtonTexture, Texture2D m_Level2ButtonTexture, Texture2D m_Level3ButtonTexture, Texture2D m_Level4ButtonTexture, Texture2D m_BackButtonTexture, SpriteFont m_ButtonFont, SpriteFont m_LargeButtonFont, Texture2D backgroundTexture)
         {
             l_Buttons = new List<Button>();
             CreateButtons(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_BackButtonTexture, m_ButtonFont, m_LargeButtonFont);
+
+            m_BackgroundTexture = backgroundTexture;
         }
 
         // Creates all the button objects for this scene
@@ -222,6 +226,7 @@ namespace Birdle
             l_Buttons.Add(m_Level4Button);
 
             m_BackButton = new Button(new Vector2(50, 850), m_BackButtonTexture, m_BackButtonTexture.Width, m_BackButtonTexture.Height, "Back", m_ButtonFont, m_LargeButtonFont);
+            m_BackButton.m_TextColor = Color.White;
         }
 
         // Called every frame from Game1
@@ -240,6 +245,8 @@ namespace Birdle
         // Called every frame from Game1
         public void Render(SpriteBatch m_SpriteBatch)
         {
+            m_SpriteBatch.Draw(m_BackgroundTexture, new Vector2(0, 0), null, Color.White);
+
             foreach (Button button in l_Buttons)
             {
                 button.Render(m_SpriteBatch);

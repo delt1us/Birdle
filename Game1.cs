@@ -81,7 +81,8 @@ namespace Birdle
             Texture2D m_Level2ButtonTexture = Content.Load<Texture2D>("Graphics/level2icon");
             Texture2D m_Level3ButtonTexture = Content.Load<Texture2D>("Graphics/level3icon");
             Texture2D m_Level4ButtonTexture = Content.Load<Texture2D>("Graphics/level4icon");
-            m_SceneLevelSelect = new SceneLevelSelect(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont);
+            Texture2D m_LevelSelectBackgroundTexture = Content.Load<Texture2D>("Graphics/level-select-screen");
+            m_SceneLevelSelect = new SceneLevelSelect(m_Level1ButtonTexture, m_Level2ButtonTexture, m_Level3ButtonTexture, m_Level4ButtonTexture, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_LevelSelectBackgroundTexture);
 
             // Game data (information like high score, best time etc)
             // Check if file exists already
