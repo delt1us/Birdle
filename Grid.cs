@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Birdle
 {
@@ -57,7 +58,6 @@ namespace Birdle
             i_MovesMade = 0;
 
             CreateTiles();
-            ShuffleTiles();
             SetRandomTileInvisible();
         }
 
@@ -98,8 +98,7 @@ namespace Birdle
             {
                 for (int column = 0; column < i_Size; column++)
                 {
-                    Tile thisTile = a_Tiles[row, column];
-                    if (thisTile.m_OriginalLocation != new Point(row, column))
+                    if (a_Tiles[row, column].m_OriginalLocation != new Point(row, column))
                     {
                         solved = false;
                     }
@@ -112,47 +111,45 @@ namespace Birdle
         public void ShuffleTiles()
         {
             Random m_Random = new Random();
-            Tile[,] a_NewTiles = new Tile[i_Size, i_Size];
-            List<(int x, int y)> l_NumList = new List<(int x, int y)>();
-
-            // Creates a list with coordinates in 
-            // This is used to make sure a tile is moved into every location and not moved into the same location twice
-            // Creates rows
-            for (int x = 0; x < i_Size; x++)
+            bool b_Moved = false;
+            for (int i = 0; i < 100; i++)
             {
-                // Creates columns
-                for (int y = 0; y < i_Size; y++)
+                // Move tile randomly
+                b_Moved = false;
+                while (!b_Moved)
                 {
-                    l_NumList.Add((x, y));
-                }
-            }
+                    // Determines direction to move tile
+                    int i_move = m_Random.Next(1, 5);
+                    Debug.WriteLine($"Random number: {i_move}");
+                    b_Moved = true;
 
-            // Moves tiles into randomly chosen location
-            // Row
-            for (int x = 0; x < i_Size; x++)
-            {
-                // Column
-                for (int y = 0; y < i_Size; y++)
-                {
-                    // Gets an index and removes it from possible options
-                    int chosenIndex = m_Random.Next(0, l_NumList.Count);
-                    (int x, int y) locationOfTileToPutHere = l_NumList[chosenIndex];
-                    l_NumList.RemoveAt(chosenIndex);
+                    // up
+                    if (i_move == 1 && m_InvisibleTile.m_GridCoordinates.Y > 0)
+                    {
+                        SwapTiles(m_InvisibleTile.m_GridCoordinates, new Point(m_InvisibleTile.m_GridCoordinates.X, m_InvisibleTile.m_GridCoordinates.Y - 1), false);
+                    }
 
-                    // Copies item at index of original list to start of new list
-                    a_NewTiles[x, y] = a_Tiles[locationOfTileToPutHere.x, locationOfTileToPutHere.y];
-                }
-            }
+                    // right
+                    else if (i_move == 2 && m_InvisibleTile.m_GridCoordinates.X < i_Size - 1)
+                    {
+                        SwapTiles(m_InvisibleTile.m_GridCoordinates, new Point(m_InvisibleTile.m_GridCoordinates.X + 1, m_InvisibleTile.m_GridCoordinates.Y), false);
+                    }
 
-            // Moves the tiles locations to newly updated location
-            // Could not do this earlier because MoveTiles moves the tiles in a_Tiles
-            a_Tiles = a_NewTiles;
-            for (int x = 0; x < i_Size; x++)
-            {
-                // Column
-                for (int y = 0; y < i_Size; y++)
-                {
-                    MoveTile(a_Tiles[x, y], new Point(x, y));
+                    // down
+                    else if (i_move == 3 && m_InvisibleTile.m_GridCoordinates.Y < i_Size - 1)
+                    {
+                        SwapTiles(m_InvisibleTile.m_GridCoordinates, new Point(m_InvisibleTile.m_GridCoordinates.X, m_InvisibleTile.m_GridCoordinates.Y + 1), false);
+                    }
+
+                    // left
+                    else if (i_move == 4  && m_InvisibleTile.m_GridCoordinates.X > 0)
+                    {
+                        SwapTiles(m_InvisibleTile.m_GridCoordinates, new Point(m_InvisibleTile.m_GridCoordinates.X - 1, m_InvisibleTile.m_GridCoordinates.Y), false);
+                    }
+                    else
+                    {
+                        b_Moved = false;
+                    }
                 }
             }
 
@@ -174,6 +171,10 @@ namespace Birdle
             if (kstate.IsKeyDown(Keys.I))
             {
                 b_Solved = true;
+            }
+            if (kstate.IsKeyDown(Keys.P))
+            {
+                ShuffleTiles();
             }
 
             // Move tile up
@@ -250,15 +251,18 @@ namespace Birdle
         }
 
         // Swaps 2 tiles given their coordinates 
-        private void SwapTiles(Point tile1Location, Point tile2Location)
+        private void SwapTiles(Point tile1Location, Point tile2Location, bool increaseMoveCounter = true)
         {
             // Simple swap with temp variable 
             Tile tempTile = a_Tiles[tile1Location.X, tile1Location.Y];
             MoveTile(a_Tiles[tile2Location.X, tile2Location.Y], tile1Location);
             MoveTile(tempTile, tile2Location);
 
-            // Updates movecounter
-            i_MovesMade += 1;
+            if (increaseMoveCounter)
+            {
+                // Updates movecounter
+                i_MovesMade += 1;
+            }
         }
 
         // Moves tile to different position in the grid and updates its location
@@ -280,16 +284,16 @@ namespace Birdle
         {
             int i_TileSize = (int)(i_GridSideLength / i_Size);
             // Each row of the grid
-            for (int row = 0; row < i_Size; row++)
+            for (int y = 0; y < i_Size; y++)
             {
                 // Each column of the grid
-                for (int column = 0; column < i_Size; column++)
+                for (int x = 0; x < i_Size; x++)
                 {
-                    Rectangle CurrentTileRectangle = new Rectangle(m_GridCoordinates.X + i_TileSize * column, m_GridCoordinates.Y + i_TileSize * row, i_TileSize, i_TileSize);
-                    Rectangle CurrentTileRegionRectangle = new Rectangle(column * i_TileSize, row * i_TileSize, i_TileSize, i_TileSize);
-                    Point TileGridCoordinates = new Point(column, row);
-                    Tile tile = new Tile(CurrentTileRectangle, CurrentTileRegionRectangle, TileGridCoordinates, new Point(row, column));
-                    a_Tiles[column, row] = tile;
+                    Rectangle CurrentTileRectangle = new Rectangle(m_GridCoordinates.X + i_TileSize * x, m_GridCoordinates.Y + i_TileSize * y, i_TileSize, i_TileSize);
+                    Rectangle CurrentTileRegionRectangle = new Rectangle(x * i_TileSize, y * i_TileSize, i_TileSize, i_TileSize);
+                    Point TileGridCoordinates = new Point(x, y);
+                    Tile tile = new Tile(CurrentTileRectangle, CurrentTileRegionRectangle, TileGridCoordinates, new Point(x, y));
+                    a_Tiles[x, y] = tile;
                 }
             }
         }

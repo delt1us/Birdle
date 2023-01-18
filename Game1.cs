@@ -61,6 +61,7 @@ namespace Birdle
             i_ClickState = 0;
             b_GridSolved = false;
             a_Songs = new Song[10];
+            MediaPlayer.Volume = 0.4f;
         }
 
         protected override void Initialize()
@@ -424,13 +425,6 @@ namespace Birdle
             {
                 button.b_Pressed = false;
             }
-        }
-
-        // Loads grid, used in a few places in CheckButtonsInLevelSelect
-        private void LoadGrid(Texture2D m_GridTexture)
-        {
-            Texture2D m_GridBorder = Content.Load<Texture2D>("Graphics/grid-border");
-            m_SceneGame.LoadGrid(m_GridBorder, m_GridTexture);
         }
 
         private void SwitchTo(string newGamestate)
