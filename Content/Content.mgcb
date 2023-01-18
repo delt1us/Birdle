@@ -238,6 +238,12 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/TitleText.png
 
+#begin sfx/funny slip noise.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/funny slip noise.wav
+
 #begin Songs/1.mp3
 /importer:Mp3Importer
 /processor:SongProcessor

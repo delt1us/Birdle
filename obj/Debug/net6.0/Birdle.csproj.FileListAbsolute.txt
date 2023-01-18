@@ -66,3 +66,4 @@ C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Son
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Songs\8.xnb
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Songs\9.ogg
 C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\Songs\9.xnb
+C:\Users\Deltius\Documents\Projects\Module 2\Birdle\bin\Debug\net6.0\Content\sfx\funny slip noise.xnb

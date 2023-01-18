@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using Newtonsoft.Json;
 
 namespace Birdle
@@ -41,6 +42,7 @@ namespace Birdle
         private bool b_GridSolved;
 
         private Song[] a_Songs;
+        private SoundEffect m_TransitionSFX;
 
         // Everything is drawn to the render m_RenderTarget "m_RenderTarget"
         private RenderTarget2D m_RenderTarget;
@@ -63,15 +65,23 @@ namespace Birdle
 
         protected override void Initialize()
         {
-            // Loads playerdata
-            LoadGameData();
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             m_SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Game data (information like high score, best time etc)
+            // Check if file exists already
+            if (File.Exists(str_PATH))
+            {
+                LoadGameData();
+            }
+            else
+            {
+                CreateGameData();
+            }
 
             // Main menu screen
             SpriteFont m_ButtonFont = Content.Load<SpriteFont>("Fonts/Button");
@@ -112,16 +122,8 @@ namespace Birdle
                 a_Songs[i-1] = Content.Load<Song>($"Songs/{i.ToString()}");
             }
 
-            // Game data (information like high score, best time etc)
-            // Check if file exists already
-            if (File.Exists(str_PATH))
-            {
-                LoadGameData();
-            }
-            else
-            {
-                CreateGameData();
-            }
+            m_TransitionSFX = Content.Load<SoundEffect>("sfx/funny slip noise");
+
             m_RenderTarget = new RenderTarget2D(GraphicsDevice, 1920, 1080);
         }
         // Runs every frame
@@ -186,6 +188,11 @@ namespace Birdle
         void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
         {
             PlayRandomSong();
+        }
+
+        private void PlayTransitionSFX()
+        {
+            m_TransitionSFX.CreateInstance().Play();
         }
 
         private void PlayRandomSong()
@@ -435,8 +442,10 @@ namespace Birdle
             }
             else if (newGamestate == "game" || newGamestate == "endless")
             {
-            PlayRandomSong();
+                PlayRandomSong();
             }
+
+            PlayTransitionSFX();
         }
 
         // Checks buttons in main menu and changes gamestate accordingly
