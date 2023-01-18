@@ -74,7 +74,8 @@ namespace Birdle
 
             // Actual game scene
             SpriteFont m_Font = Content.Load<SpriteFont>("Fonts/Default");
-            m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont);
+            Texture2D m_GameBackgroundTexture = Content.Load<Texture2D>("Graphics/game-background");
+            m_SceneGame = new SceneGame(t_SCREEN_DIMENSIONS, m_Font, m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_GameBackgroundTexture);
 
             // Level select screen
             Texture2D m_Level1ButtonTexture = Content.Load<Texture2D>("Graphics/level1icon");

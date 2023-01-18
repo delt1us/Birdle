@@ -32,13 +32,16 @@ namespace Birdle
         public Button m_BackButton;
         public Level m_ActiveLevel;
 
-        public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont, SpriteFont largeButtonFont)
+        private Texture2D m_BackgroundTexture;
+
+        public SceneGame((int width, int height) t_SCREEN_DIMENSIONS, SpriteFont font, Texture2D backButtonTexture, SpriteFont backButtonFont, SpriteFont largeButtonFont, Texture2D backgroundTexture)
         {
             f_TimeSpentOnPuzzle = 0f;
-
             m_Font = font;
-
             m_BackButton = new Button(new Vector2(50, 850), backButtonTexture, backButtonTexture.Width, backButtonTexture.Height, "Back", backButtonFont, largeButtonFont);
+            m_BackButton.m_TextColor = Color.White;
+
+            m_BackgroundTexture = backgroundTexture;
         }
 
         public void Reset()
@@ -74,6 +77,7 @@ namespace Birdle
         // Called every frame from Draw in Game1
         public void Render(SpriteBatch m_SpriteBatch)
         {
+            m_SpriteBatch.Draw(m_BackgroundTexture, new Vector2(0, 0), null, Color.White);
             // Draws grid
             m_Grid.Render(m_SpriteBatch);
             // Draws solution
