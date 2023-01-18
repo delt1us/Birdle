@@ -4,7 +4,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using Microsoft.Xna.Framework.Media;
 using Newtonsoft.Json;
 
 namespace Birdle
@@ -38,6 +38,8 @@ namespace Birdle
         private int i_ClickState;
         private bool b_GridSolved;
 
+        private Song[] a_Songs;
+
         // Everything is drawn to the render m_RenderTarget "m_RenderTarget"
         private RenderTarget2D m_RenderTarget;
 
@@ -54,6 +56,7 @@ namespace Birdle
 
             i_ClickState = 0;
             b_GridSolved = false;
+            a_Songs = new Song[10];
         }
 
         protected override void Initialize()
@@ -90,6 +93,12 @@ namespace Birdle
             // Credits screen
             Texture2D m_CreditsTitleText = Content.Load<Texture2D>("Graphics/CreditsText");
             m_SceneCredits = new SceneCredits(m_ButtonTexture, m_ButtonFont, m_LargeButtonFont, m_GameBackgroundTexture, m_CreditsTitleText, m_Font);
+
+            // Loads music
+            for (int i = 1; i < 11; i++)
+            {
+                a_Songs[i-1] = Content.Load<Song>($"Songs/{i.ToString()}");
+            }
 
             // Game data (information like high score, best time etc)
             // Check if file exists already
@@ -280,6 +289,7 @@ namespace Birdle
             {
                 SwitchTo("level select");
                 m_SceneGame.m_BackButton.b_Pressed = false;
+                MediaPlayer.Stop();
             }
         }
 
@@ -377,6 +387,11 @@ namespace Birdle
             if (newGamestate == "level select")
             {
                 SetLevelsActive();
+            }
+            else if (newGamestate == "game")
+            {
+                Random m_Random = new Random();
+                MediaPlayer.Play(a_Songs[m_Random.Next(0, 10)]);
             }
         }
 
