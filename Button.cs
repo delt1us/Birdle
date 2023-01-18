@@ -23,8 +23,6 @@ namespace Birdle
         public bool b_Active;
         public bool b_TextVisible;
         public Color m_TextColor;
-        private bool b_Selected;
-        private float f_Scale;
         private Vector2 vec_Location;
         private Vector2 vec_TextSize;
 
@@ -43,8 +41,6 @@ namespace Birdle
             b_Active = true;    
             b_TextVisible = textVisible;
             m_TextColor = Color.Black;
-            b_Selected = false;
-            f_Scale = 1f;
         }
         // Called every frame
         public void Update()
@@ -59,13 +55,11 @@ namespace Birdle
 
             if (rec_ButtonHitbox.Contains(m_MouseState.Position))
             {
-                b_Selected = true;
                 m_Font = m_LargeFont;
             }
 
             else
             {
-                b_Selected = false;
                 m_Font = m_SmallFont;
             }
         }
